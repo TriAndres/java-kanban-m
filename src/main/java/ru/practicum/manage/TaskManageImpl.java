@@ -1,0 +1,227 @@
+package ru.practicum.manage;
+
+import ru.practicum.model.Epic;
+import ru.practicum.model.Status;
+import ru.practicum.model.Subtask;
+import ru.practicum.model.Task;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class TaskManageImpl implements TaskManage {
+    private final HashMap<Long, Task> taskMap = new HashMap<>();
+    private final HashMap<Long, Subtask> subtaskMap = new HashMap<>();
+    private final HashMap<Long, Epic> epicMap = new HashMap<>();
+
+    @Override
+    public List<Task> getTaskAll() {
+        ArrayList<Task> list = new ArrayList<>();
+        for (Long key : taskMap.keySet()) {
+            Task task = taskMap.get(key);
+            list.add(task);
+        }
+        return list;
+    }
+
+    @Override
+    public List<Epic> getEpicAll() {
+        ArrayList<Epic> list = new ArrayList<>();
+        for (Long key : epicMap.keySet()) {
+            Epic epic = epicMap.get(key);
+            list.add(epic);
+        }
+        return list;
+    }
+
+    @Override
+    public List<Subtask> getSubtaskAll() {
+        ArrayList<Subtask> list = new ArrayList<>();
+        for (Long key : subtaskMap.keySet()) {
+            Subtask subtask = subtaskMap.get(key);
+            list.add(subtask);
+        }
+        return list;
+    }
+
+    @Override
+    public Task createTask(Task task) {
+        Long id = getTaskNextId();
+        task.setId(id);
+        taskMap.put(id, task);
+        return task;
+    }
+
+    @Override
+    public Epic createEpic(Epic epic) {
+        Long id = getEpicNextId();
+        epic.setId(id);
+        epicMap.put(id, epic);
+        return epic;
+    }
+
+    @Override
+    public Subtask createSubtask(Subtask subtask) {
+        Long id = getSubtaskNextId();
+        subtask.setId(id);
+        subtaskMap.put(id, subtask);
+        Long idEpic = subtask.getIdEpic();
+        Epic epic = epicMap.get(idEpic);
+        ArrayList<Subtask> list = new ArrayList<>();
+        list.add(subtask);
+        epic.setSubtasks(list);
+        statusEpic(epic);
+        return subtask;
+    }
+
+    @Override
+    public void updateTask(Task task) {
+        if (taskMap.containsKey(task.getId())) {
+            taskMap.put(task.getId(), task);
+        } else {
+            System.err.println("Такого ключа нет");
+        }
+    }
+
+    @Override
+    public void updateEpic(Epic epic) {
+        if (epicMap.containsKey(epic.getId())) {
+            epicMap.put(epic.getId(), epic);
+        } else {
+            System.err.println("Такого ключа нет");
+        }
+    }
+
+    @Override
+    public void updateSubtask(Subtask subtask) {
+        if (subtaskMap.containsKey(subtask.getId())) {
+            subtaskMap.put(subtask.getId(), subtask);
+            Long idEpic = subtask.getIdEpic();
+            Epic epic = epicMap.get(idEpic);
+            List<Subtask> list = epic.getSubtasks();
+            list.add(subtask);
+            statusEpic(epic);
+        } else {
+            System.err.println("Такого ключа нет");
+        }
+    }
+
+    @Override
+    public Task getTaskById(Long id) {
+        return taskMap.get(id);
+    }
+
+    @Override
+    public Epic getEpicById(Long id) {
+        return epicMap.get(id);
+    }
+
+    @Override
+    public Subtask getSubtaskById(Long id) {
+        return subtaskMap.get(id);
+    }
+
+    @Override
+    public void deleteTaskById(Long id) {
+        taskMap.remove(id);
+    }
+
+    @Override
+    public void deleteEpicById(Long id) {
+        Epic epic = epicMap.get(id);
+        for (Subtask subtask : epic.getSubtasks()) {
+            if (epic.getId().equals(subtask.getIdEpic())) {
+                subtaskMap.remove(subtask.getId());
+            }
+        }
+        epicMap.remove(id);
+    }
+
+    @Override
+    public void deleteSubtaskById(Long id) {
+        subtaskMap.remove(id);
+    }
+
+    @Override
+    public void deleteTaskAll() {
+        taskMap.clear();
+    }
+
+    @Override
+    public void deleteEpicAll() {
+        epicMap.clear();
+        subtaskMap.clear();
+    }
+
+    @Override
+    public void deleteSubtaskAll() {
+        subtaskMap.clear();
+        for (Epic value : epicMap.values()) {
+            value.getSubtasks().clear();
+            statusEpic(value);
+        }
+    }
+
+    @Override
+    public List<Subtask> getListSubtaskIdEpic(Long id) {
+        Epic epic = epicMap.get(id);
+        return epic.getSubtasks();
+    }
+
+    @Override
+    public void statusEpic(Epic epic) {
+        List<Subtask> list = epic.getSubtasks();
+        Task task = taskMap.get(epic.getId());
+        int count1 = 0;
+        int count2 = 0;
+        for (Subtask subtask : list) {
+            if (subtask.getStatus().equals(Status.NEW)) {
+                count1++;
+                if (count1 == list.size()) {
+                    epic.setStatus(Status.NEW);
+                    task.setStatus(Status.NEW);
+                }
+            } else if (subtask.getStatus().equals(Status.DONE)) {
+                epic.setStatus(Status.IN_PROGRESS);
+                task.setStatus(Status.IN_PROGRESS);
+                for (Subtask epicSubtask : epic.getSubtasks()) {
+                    if (count2 == epic.getSubtasks().size()) {
+                        epic.setStatus(Status.DONE);
+                        task.setStatus(Status.DONE);
+                    }
+                    count2++;
+                }
+            } else {
+                epic.setStatus(Status.IN_PROGRESS);
+                task.setStatus(Status.IN_PROGRESS);
+            }
+        }
+    }
+
+    private long getTaskNextId() {
+        long currentMaxId = taskMap.values()
+                .stream()
+                .mapToLong(Task::getId)
+                .max()
+                .orElse(0);
+        return ++currentMaxId;
+    }
+
+    private long getEpicNextId() {
+        long currentMaxId = epicMap.values()
+                .stream()
+                .mapToLong(Epic::getId)
+                .max()
+                .orElse(0);
+        return ++currentMaxId;
+    }
+
+    private long getSubtaskNextId() {
+        long currentMaxId = subtaskMap.values()
+                .stream()
+                .mapToLong(Subtask::getId)
+                .max()
+                .orElse(0);
+        return ++currentMaxId;
+    }
+}
