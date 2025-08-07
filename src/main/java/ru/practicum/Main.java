@@ -126,7 +126,7 @@ public class Main {
             System.out.println(subtask.toString());
         }
         System.out.println("\n//////////////////////////////");
-        System.out.println("К 1 задаче, 1 эпика, к первой подзадаче записываем DONE");
+        System.out.println("Обновляем обратно до  NEW");
 
         subtask2.setStatus(Status.NEW);
         manageImpl.updateSubtask(subtask1);
