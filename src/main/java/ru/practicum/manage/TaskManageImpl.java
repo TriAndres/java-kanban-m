@@ -8,6 +8,7 @@ import ru.practicum.model.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class TaskManageImpl implements TaskManage {
     private final HashMap<Long, Task> taskMap = new HashMap<>();
@@ -79,7 +80,7 @@ public class TaskManageImpl implements TaskManage {
         if (taskMap.containsKey(task.getId())) {
             taskMap.put(task.getId(), task);
         } else {
-            System.err.println("Такого ключа нет");
+            System.out.println("task not id=" + task.getId());
         }
     }
 
@@ -88,7 +89,7 @@ public class TaskManageImpl implements TaskManage {
         if (epicMap.containsKey(epic.getId())) {
             epicMap.put(epic.getId(), epic);
         } else {
-            System.err.println("Такого ключа нет");
+            System.out.println("task not id=" + epic.getId());
         }
     }
 
@@ -102,23 +103,35 @@ public class TaskManageImpl implements TaskManage {
             list.add(subtask);
             statusEpic(epic);
         } else {
-            System.err.println("Такого ключа нет");
+            System.out.println("task not id=" + subtask.getId());
         }
     }
 
     @Override
     public Task getTaskById(Long id) {
-        return taskMap.get(id);
+        if (taskMap.containsKey(id)) {
+            return taskMap.get(id);
+        }
+        System.out.println("task not id=" + id);
+        return null;
     }
 
     @Override
     public Epic getEpicById(Long id) {
-        return epicMap.get(id);
+        if (epicMap.containsKey(id)) {
+            return epicMap.get(id);
+        }
+        System.out.println("epic not id=" + id);
+        return null;
     }
 
     @Override
     public Subtask getSubtaskById(Long id) {
-        return subtaskMap.get(id);
+        if (subtaskMap.containsKey(id)) {
+            return subtaskMap.get(id);
+        }
+        System.out.println("subtask not id=" + id);
+        return null;
     }
 
     @Override
@@ -128,17 +141,25 @@ public class TaskManageImpl implements TaskManage {
 
     @Override
     public void deleteEpicById(Long id) {
-        Epic epic = epicMap.get(id);
-        for (Subtask subtask : epic.getSubtasks()) {
-            if (epic.getId().equals(subtask.getIdEpic())) {
-                subtaskMap.remove(subtask.getId());
+        epicMap.remove(id);
+        if (epicMap.containsKey(id)) {
+            Epic epic = epicMap.get(id);
+            for (Subtask subtask : epic.getSubtasks()) {
+                if (epic.getId().equals(subtask.getIdEpic())) {
+                    subtaskMap.remove(subtask.getId());
+                }
             }
         }
-        epicMap.remove(id);
     }
 
     @Override
     public void deleteSubtaskById(Long id) {
+        Epic epic = epicMap.get(subtaskMap.get(id).getIdEpic());
+        for (Subtask subtask : epic.getSubtasks()) {
+            if (Objects.equals(subtask.getId(), id)) {
+                subtaskMap.remove(id);
+            }
+        }
         subtaskMap.remove(id);
     }
 
@@ -155,45 +176,51 @@ public class TaskManageImpl implements TaskManage {
 
     @Override
     public void deleteSubtaskAll() {
-        subtaskMap.clear();
         for (Epic value : epicMap.values()) {
             value.getSubtasks().clear();
             statusEpic(value);
         }
+        subtaskMap.clear();
     }
 
     @Override
     public List<Subtask> getListSubtaskIdEpic(Long id) {
-        Epic epic = epicMap.get(id);
-        return epic.getSubtasks();
+        if (epicMap.containsKey(id)) {
+            Epic epic = epicMap.get(id);
+            return epic.getSubtasks();
+        }
+        System.out.println("epic not id=" + id);
+        return new ArrayList<>();
     }
 
     @Override
     public void statusEpic(Epic epic) {
-        List<Subtask> list = epic.getSubtasks();
-        Task task = taskMap.get(epic.getId());
-        int count1 = 0;
-        int count2 = 0;
-        for (Subtask subtask : list) {
-            if (subtask.getStatus().equals(Status.NEW)) {
-                count1++;
-                if (count1 == list.size()) {
-                    epic.setStatus(Status.NEW);
-                    task.setStatus(Status.NEW);
-                }
-            } else if (subtask.getStatus().equals(Status.DONE)) {
-                epic.setStatus(Status.IN_PROGRESS);
-                task.setStatus(Status.IN_PROGRESS);
-                for (Subtask epicSubtask : epic.getSubtasks()) {
-                    if (count2 == epic.getSubtasks().size()) {
-                        epic.setStatus(Status.DONE);
-                        task.setStatus(Status.DONE);
+        if (epicMap.containsKey(epic.getId())) {
+            List<Subtask> list = epic.getSubtasks();
+            Task task = taskMap.get(epic.getId());
+            int count1 = 0;
+            int count2 = 0;
+            for (Subtask subtask : list) {
+                if (subtask.getStatus().equals(Status.NEW)) {
+                    count1++;
+                    if (count1 == list.size()) {
+                        epic.setStatus(Status.NEW);
+                        task.setStatus(Status.NEW);
                     }
-                    count2++;
+                } else if (subtask.getStatus().equals(Status.DONE)) {
+                    epic.setStatus(Status.IN_PROGRESS);
+                    task.setStatus(Status.IN_PROGRESS);
+                    for (Subtask epicSubtask : epic.getSubtasks()) {
+                        if (count2 == epic.getSubtasks().size()) {
+                            epic.setStatus(Status.DONE);
+                            task.setStatus(Status.DONE);
+                        }
+                        count2++;
+                    }
+                } else {
+                    epic.setStatus(Status.IN_PROGRESS);
+                    task.setStatus(Status.IN_PROGRESS);
                 }
-            } else {
-                epic.setStatus(Status.IN_PROGRESS);
-                task.setStatus(Status.IN_PROGRESS);
             }
         }
     }
