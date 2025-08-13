@@ -161,6 +161,10 @@ public class Main {
         for (Subtask subtask : manageImpl.getSubtaskAll()) {
             System.out.println(subtask.toString());
         }
+        System.out.println("///////////////////epic");
+        for (Subtask subtask : manageImpl.getListSubtaskIdEpic(1L)) {
+            System.out.println(subtask);
+        }
         System.out.println("\n//////////////////////////////");
         System.out.println("Удалить все задачу, удалить все эпик");
 
