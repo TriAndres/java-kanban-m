@@ -10,10 +10,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class TaskManageImpl implements TaskManage {
+import static ru.practicum.manage.Managers.getDefaultHistory;
+
+public class InMemoryTaskManager implements TaskManage {
     private final HashMap<Long, Task> taskMap = new HashMap<>();
     private final HashMap<Long, Subtask> subtaskMap = new HashMap<>();
     private final HashMap<Long, Epic> epicMap = new HashMap<>();
+    private final HistoryManager historyManager;
+
+    public InMemoryTaskManager() {
+        this.historyManager = getDefaultHistory();
+    }
 
     @Override
     public List<Task> getTaskAll() {
@@ -184,6 +191,11 @@ public class TaskManageImpl implements TaskManage {
     }
 
     @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
+
     public List<Subtask> getListSubtaskIdEpic(Long id) {
         if (epicMap.containsKey(id)) {
             Epic epic = epicMap.get(id);
@@ -193,7 +205,7 @@ public class TaskManageImpl implements TaskManage {
         return new ArrayList<>();
     }
 
-    @Override
+
     public void statusEpic(Epic epic) {
         if (epicMap.containsKey(epic.getId())) {
             List<Subtask> list = epic.getSubtasks();
@@ -210,7 +222,7 @@ public class TaskManageImpl implements TaskManage {
                 } else if (subtask.getStatus().equals(Status.DONE)) {
                     epic.setStatus(Status.IN_PROGRESS);
                     task.setStatus(Status.IN_PROGRESS);
-                    for (Subtask epicSubtask : epic.getSubtasks()) {
+                    for (Subtask epicSbtask : epic.getSubtasks()) {
                         if (count2 == epic.getSubtasks().size()) {
                             epic.setStatus(Status.DONE);
                             task.setStatus(Status.DONE);

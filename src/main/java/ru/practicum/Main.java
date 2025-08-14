@@ -1,6 +1,6 @@
 package ru.practicum;
 
-import ru.practicum.manage.TaskManageImpl;
+import ru.practicum.manage.InMemoryTaskManager;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Status;
 import ru.practicum.model.Subtask;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManageImpl manageImpl = new TaskManageImpl();
+        InMemoryTaskManager manageImpl = new InMemoryTaskManager();
 
         System.out.println("\nСоздаём 1 задачу задачи");
         System.out.println(manageImpl.createTask(new Task(
