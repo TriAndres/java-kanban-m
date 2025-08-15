@@ -1,187 +1,154 @@
 package ru.practicum;
 
-import ru.practicum.manage.InMemoryTaskManager;
+import ru.practicum.manage.TaskManage;
 import ru.practicum.model.Epic;
-import ru.practicum.model.Status;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
-import java.util.ArrayList;
+import java.util.Scanner;
+
+import static ru.practicum.manage.Managers.getDefault;
 
 public class Main {
+    TaskManage taskManage = getDefault();
+
     public static void main(String[] args) {
-        InMemoryTaskManager manageImpl = new InMemoryTaskManager();
+        new Main().game();
+    }
 
-        System.out.println("\nСоздаём 1 задачу задачи");
-        System.out.println(manageImpl.createTask(new Task(
-                null,
-                null,
-                "*** 1 ЗАДАЧА ***",
-                null
-        )));
-        Task task1 = manageImpl.getTaskById(1L);
+    public void game() {
+        while (true) {
+            String line = menu();
+            select(line);
+            if (line.equals("0")) break;
+        }
+    }
 
-        System.out.println("\nСоздайте эпик 1 с 2 подзадачами");
-        System.out.println(manageImpl.createEpic(new Epic(
-                null,
-                null,
-                "*** 1 эпик, 1 задачи ***",
-                null,
-                new ArrayList<>()
-        )));
-        Epic epic1 = manageImpl.getEpicById(1L);
+    private String menu() {
+        System.out.println("""
+                1 - вывод список задач.
+                2 - добавить задачу.
+                3 - добавить подзадачу.
+                4 - вывод статистику задачи.
+                5 - добавить статус подзадаче.
+                6 - удалить задачу.
+                7 - вывод статистику всех задач.
+                8 - удалить все задачи.
+                0 - вызод из программы.
+                """);
+        return new Scanner(System.in).next();
+    }
 
-        System.out.println(manageImpl.createSubtask(new Subtask(
-                null,
-                null,
-                "*** 1 подзадача , 1 эпика ***",
-                null,
-                epic1.getId()
-        )));
-        Subtask subtask1 = manageImpl.getSubtaskById(1L);
+    private void select(String line) {
+        switch (line) {
+            case "0":
+                System.out.println("Выход из программы.");
+                break;
+            case "1":
+                showTask();
+                break;
+            case "2":
+                addTask();
+                break;
+            case "3":
+                addSubtask();
+                break;
+            case "4":
+                showStatisticTaskId();
+                break;
+            case "5":
+                addStatusSubtask();
+                break;
+            case "6":
+                deleteTaskById();
+                break;
+            case "7":
+                showStatisticTaskAll();
+                break;
+            case "8":
+                deleteTaskAll();
+                break;
+            default:
+                System.out.println("выбирите действие из списка.");
+                break;
+        }
+    }
 
-        System.out.println(manageImpl.createSubtask(new Subtask(
-                null,
-                null,
-                "*** 2 подзадача, 1 эпика ***",
-                null,
-                epic1.getId()
-        )));
-        Subtask subtask2 = manageImpl.getSubtaskById(2L);
-
-        System.out.println("\nСоздаём 2 задачу задачи");
-        System.out.println(manageImpl.createTask(new Task(
-                null,
-                null,
-                "*** 2 ЗАДАЧА ***",
-                null
-        )));
-        Task task2 = manageImpl.getTaskById(2L);
-
-        System.out.println("\nСоздайте эпик 2 с 1 подзадачей");
-        System.out.println(manageImpl.createEpic(new Epic(
-                null,
-                null,
-                "*** 2 эпик, 1 задачи ***",
-                null,
-                new ArrayList<>()
-        )));
-        Epic epic2 = manageImpl.getEpicById(2L);
-
-        System.out.println(manageImpl.createSubtask(new Subtask(
-                null,
-                null,
-                "*** 1 подзадача, 2 эпика***",
-                null,
-                epic2.getId()
-        )));
-        Subtask subtask3 = manageImpl.getSubtaskById(3L);
-
-        System.out.println("\n///Вывод списков");
-        for (Task task : manageImpl.getTaskAll()) {
-            System.out.println(task.toString());
+    private void showTask() {
+        if (!taskManage.getTaskAll().isEmpty()) {
+            for (Task task : taskManage.getTaskAll()) {
+                System.out.println(task.toString());
+            }
+            System.out.println("Вывод всех задач.\n");
+        } else {
+            System.out.println("Список пуст, добавте задачу.\n");
         }
 
-        for (Epic epic : manageImpl.getEpicAll()) {
-            System.out.println(epic.toString());
+    }
+
+    private void addTask() {
+        System.out.println("Введите название задачи:");
+        String description = new Scanner(System.in).nextLine();
+        Task task = new Task();
+        task.setDescription(description);
+        Epic epic = new Epic();
+        epic.setDescription(description);
+        System.out.println("Записано:\n" +
+                taskManage.createTask(task) + "\n" +
+                taskManage.createEpic(epic) + "\n");
+    }
+
+    private void addSubtask() {
+        System.out.println("Введите id задачи для ввода подзадачи:");
+        long id = Long.parseLong(new Scanner(System.in).next());
+        if (taskManage.getTaskAll().contains(taskManage.getTaskById(id))) {
+            Task task = taskManage.getTaskById(id);
+            Epic epic = taskManage.getEpicById(id);
+            Subtask subtask = new Subtask();
+            subtask.setIdEpic(epic.getId());
+            System.out.println("Введите название подзадачи:");
+            String description = new Scanner(System.in).nextLine();
+            subtask.setDescription(description);
+            taskManage.createSubtask(subtask);
+            System.out.println("Записано в задаче:\n" +
+                    task.toString());
+            System.out.println("Записано epic.getSubtasks");
+            for (Subtask subtask1 : epic.getSubtasks()) {
+                System.out.println(subtask1.toString());
+            }
         }
+    }
 
-        for (Subtask subtask : manageImpl.getSubtaskAll()) {
-            System.out.println(subtask.toString());
+    private void showStatisticTaskId() {
+        if (!taskManage.getTaskAll().isEmpty()) {
+            System.out.println("Введите id задачи:");
+            long id = Long.parseLong(new Scanner(System.in).next());
+            if (taskManage.getTaskAll().contains(taskManage.getTaskById(id))) {
+                Task task = taskManage.getTaskById(id);
+                System.out.println(task.toString());
+                Epic epic = taskManage.getEpicById(id);
+                for (Subtask subtask : epic.getSubtasks()) {
+                    System.out.println(subtask.toString());
+                }
+            }
+        } else {
+            System.out.println("Список пуст, добавте задачу.");
         }
-        System.out.println("\n//////////////////////////////");
-        System.out.println("К 1 задаче, 1 эпика, к первой подзадаче записываем DONE");
+    }
 
-        subtask1.setStatus(Status.DONE);
-        manageImpl.updateSubtask(subtask1);
+    private void addStatusSubtask() {
+        System.out.println("В разработке.");
+    }
 
-        System.out.println("\n///Вывод списков");
-        for (Task task : manageImpl.getTaskAll()) {
-            System.out.println(task.toString());
-        }
+    private void deleteTaskById() {
+        System.out.println("В разработке.");
+    }
 
-        for (Epic epic : manageImpl.getEpicAll()) {
-            System.out.println(epic.toString());
-        }
+    private void showStatisticTaskAll() {
+        System.out.println("В разработке.");
+    }
 
-        for (Subtask subtask : manageImpl.getSubtaskAll()) {
-            System.out.println(subtask.toString());
-        }
-        System.out.println("\n//////////////////////////////");
-        System.out.println("К 1 задаче, 1 эпика, к первой подзадаче записываем DONE");
-
-        subtask2.setStatus(Status.DONE);
-        manageImpl.updateSubtask(subtask1);
-
-        System.out.println("\n///Вывод списков");
-        for (Task task : manageImpl.getTaskAll()) {
-            System.out.println(task.toString());
-        }
-
-        for (Epic epic : manageImpl.getEpicAll()) {
-            System.out.println(epic.toString());
-        }
-
-        for (Subtask subtask : manageImpl.getSubtaskAll()) {
-            System.out.println(subtask.toString());
-        }
-        System.out.println("\n//////////////////////////////");
-        System.out.println("Обновляем обратно до  NEW");
-
-        subtask2.setStatus(Status.NEW);
-        manageImpl.updateSubtask(subtask1);
-
-        System.out.println("\n///Вывод списков");
-        for (Task task : manageImpl.getTaskAll()) {
-            System.out.println(task.toString());
-        }
-
-        for (Epic epic : manageImpl.getEpicAll()) {
-            System.out.println(epic.toString());
-        }
-
-        for (Subtask subtask : manageImpl.getSubtaskAll()) {
-            System.out.println(subtask.toString());
-        }
-        System.out.println("\n//////////////////////////////");
-        System.out.println("Удалить 1 задачу, удалить 1 эпик");
-
-        manageImpl.deleteTaskById(1L);
-        manageImpl.deleteEpicById(1L);
-
-        System.out.println("\n///Вывод списков");
-        for (Task task : manageImpl.getTaskAll()) {
-            System.out.println(task.toString());
-        }
-
-        for (Epic epic : manageImpl.getEpicAll()) {
-            System.out.println(epic.toString());
-        }
-
-        for (Subtask subtask : manageImpl.getSubtaskAll()) {
-            System.out.println(subtask.toString());
-        }
-        System.out.println("///////////////////epic");
-        for (Subtask subtask : manageImpl.getListSubtaskIdEpic(1L)) {
-            System.out.println(subtask);
-        }
-        System.out.println("\n//////////////////////////////");
-        System.out.println("Удалить все задачу, удалить все эпик");
-
-        manageImpl.deleteTaskAll();
-        manageImpl.deleteEpicAll();
-
-        System.out.println("\n///Вывод списков");
-        for (Task task : manageImpl.getTaskAll()) {
-            System.out.println(task.toString());
-        }
-
-        for (Epic epic : manageImpl.getEpicAll()) {
-            System.out.println(epic.toString());
-        }
-
-        for (Subtask subtask : manageImpl.getSubtaskAll()) {
-            System.out.println(subtask.toString());
-        }
+    private void deleteTaskAll() {
+        System.out.println("В разработке.");
     }
 }
