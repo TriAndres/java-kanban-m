@@ -65,6 +65,7 @@ public class InMemoryTaskManager implements TaskManage {
         Long id = getEpicNextId();
         epic.setId(id);
         epicMap.put(id, epic);
+        statusEpic(epic);
         return epic;
     }
 
@@ -78,7 +79,7 @@ public class InMemoryTaskManager implements TaskManage {
         ArrayList<Subtask> list = (ArrayList<Subtask>) epic.getSubtasks();
         list.add(subtask);
         epic.setSubtasks(list);
-        epicMap.put(epic.getId(),epic);
+        epicMap.put(epic.getId(), epic);
         statusEpic(epic);
         return subtask;
     }
@@ -96,6 +97,7 @@ public class InMemoryTaskManager implements TaskManage {
     public void updateEpic(Epic epic) {
         if (epicMap.containsKey(epic.getId())) {
             epicMap.put(epic.getId(), epic);
+            statusEpic(epic);
         } else {
             System.out.println("task not id=" + epic.getId());
         }
@@ -158,6 +160,7 @@ public class InMemoryTaskManager implements TaskManage {
                     subtaskMap.remove(subtask.getId());
                 }
             }
+            statusEpic(epic);
         }
     }
 
@@ -170,6 +173,7 @@ public class InMemoryTaskManager implements TaskManage {
             }
         }
         subtaskMap.remove(id);
+        statusEpic(epic);
     }
 
     @Override
@@ -185,9 +189,9 @@ public class InMemoryTaskManager implements TaskManage {
 
     @Override
     public void deleteSubtaskAll() {
-        for (Epic value : epicMap.values()) {
-            value.getSubtasks().clear();
-            statusEpic(value);
+        for (Epic epic : epicMap.values()) {
+            epic.getSubtasks().clear();
+            statusEpic(epic);
         }
         subtaskMap.clear();
     }
@@ -201,7 +205,7 @@ public class InMemoryTaskManager implements TaskManage {
     public List<Subtask> getListSubtaskIdEpic(Long id) {
         if (epicMap.containsKey(id)) {
             Epic epic = epicMap.get(id);
-            return epic.getSubtasks();
+            return new ArrayList<>(epic.getSubtasks());
         }
         System.out.println("epic not id=" + id);
         return new ArrayList<>();
@@ -222,14 +226,16 @@ public class InMemoryTaskManager implements TaskManage {
                         task.setStatus(Status.NEW);
                     }
                 } else if (subtask.getStatus().equals(Status.DONE)) {
-                    epic.setStatus(Status.IN_PROGRESS);
-                    task.setStatus(Status.IN_PROGRESS);
-                    for (Subtask epicSbtask : epic.getSubtasks()) {
+
+                    for (Subtask epicSubtask : epic.getSubtasks()) {
+                        count2++;
                         if (count2 == epic.getSubtasks().size()) {
                             epic.setStatus(Status.DONE);
                             task.setStatus(Status.DONE);
+                        } else {
+                            epic.setStatus(Status.IN_PROGRESS);
+                            task.setStatus(Status.IN_PROGRESS);
                         }
-                        count2++;
                     }
                 } else {
                     epic.setStatus(Status.IN_PROGRESS);

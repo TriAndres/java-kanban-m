@@ -1,9 +1,7 @@
 package ru.practicum;
 
-import com.sun.source.doctree.LiteralTree;
 import ru.practicum.manage.TaskManage;
 import ru.practicum.model.Epic;
-import ru.practicum.model.Status;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
@@ -141,37 +139,41 @@ public class Main {
     }
 
     private void addStatusSubtask() {
-       if (!taskManage.getSubtaskAll().isEmpty()) {
-           System.out.println("Введите id подзадачи:");
-           long id = Long.parseLong(new Scanner(System.in).next());
-           if (taskManage.getSubtaskAll().contains(taskManage.getSubtaskById(id))) {
-               Subtask subtask = taskManage.getSubtaskById(id);
-               while (true) {
-                   System.out.println("""
-                       NEW - не решёная подзадача.
-                       DONE - решил подзадачу.
-                       """);
-                   String status = new Scanner(System.in).next();
-                   switch (status.toUpperCase()) {
-                       case "NEW":
-                           subtask.setStatus(NEW);
-                           break;
-                       case "DONE":
-                           subtask.setStatus(DONE);
-                           break;
-                       default:
-                           System.out.println("Выбирите команду из списка.");
-                   }
-                   System.out.println("Записано:\n" +
-                           subtask.toString());
-                   if (status.equals("NEW") || status.equals("DONE")) break;
-               }
-           } else {
-               System.out.println("Такой подзадачи нет с id=" + id);
-           }
-       } else {
-           System.out.println("Список пуст, добавте подзадачу.");
-       }
+        if (!taskManage.getSubtaskAll().isEmpty()) {
+            System.out.println("Введите id подзадачи:");
+            long id = Long.parseLong(new Scanner(System.in).next());
+            if (taskManage.getSubtaskAll().contains(taskManage.getSubtaskById(id))) {
+                Subtask subtask = taskManage.getSubtaskById(id);
+                while (true) {
+                    System.out.println("""
+                            NEW - не решёная подзадача.
+                            DONE - решил подзадачу.
+                            """);
+                    String status = new Scanner(System.in).next();
+                    switch (status.toUpperCase()) {
+                        case "NEW":
+                            subtask.setStatus(NEW);
+                            break;
+                        case "DONE":
+                            subtask.setStatus(DONE);
+                            break;
+                        default:
+                            System.out.println("Выбирите команду из списка.");
+                    }
+                    taskManage.updateSubtask(subtask);
+                    System.out.println("Записано:\n" +
+                            subtask.toString());
+                    if (status.equals("NEW") ||
+                            status.equals("new") ||
+                            status.equals("DONE") ||
+                            status.equals("done")) break;
+                }
+            } else {
+                System.out.println("Такой подзадачи нет с id=" + id);
+            }
+        } else {
+            System.out.println("Список пуст, добавте подзадачу.");
+        }
     }
 
     private void deleteTaskById() {
