@@ -75,9 +75,10 @@ public class InMemoryTaskManager implements TaskManage {
         subtaskMap.put(id, subtask);
         Long idEpic = subtask.getIdEpic();
         Epic epic = epicMap.get(idEpic);
-        ArrayList<Subtask> list = new ArrayList<>();
+        ArrayList<Subtask> list = (ArrayList<Subtask>) epic.getSubtasks();
         list.add(subtask);
         epic.setSubtasks(list);
+        epicMap.put(epic.getId(),epic);
         statusEpic(epic);
         return subtask;
     }
@@ -127,9 +128,10 @@ public class InMemoryTaskManager implements TaskManage {
     public Epic getEpicById(Long id) {
         if (epicMap.containsKey(id)) {
             return epicMap.get(id);
+        } else {
+            System.out.println("epic not id=" + id);
+            return null;
         }
-        System.out.println("epic not id=" + id);
-        return null;
     }
 
     @Override

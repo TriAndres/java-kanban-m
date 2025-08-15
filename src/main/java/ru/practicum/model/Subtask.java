@@ -4,6 +4,7 @@ public class Subtask extends Task {
     private Long idEpic;
 
     public Subtask() {
+        this(null,null,null,null,null);
         if (title == null) {
             this.title = "Подзадача";
         }
@@ -13,7 +14,6 @@ public class Subtask extends Task {
     }
 
     public Subtask(Long id, String title, String description, Status status, Long idEpic) {
-        super(id, title, description, status);
         this.idEpic = idEpic;
         if (this.id == null || this.id == 0) {
             this.id = getId();

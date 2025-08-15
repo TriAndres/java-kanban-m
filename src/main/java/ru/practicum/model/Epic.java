@@ -1,11 +1,13 @@
 package ru.practicum.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    private List<Subtask> subtasks;
+    private List<Subtask> subtasks = new ArrayList<>();
 
     public Epic() {
+        this(null,null,null,null);
         if (getTitle() == null) {
             this.title = "Эпик";
         }
@@ -14,12 +16,11 @@ public class Epic extends Task {
         }
     }
 
-    public Epic(Long id, String title, String description, Status status, List<Subtask> subtasks) {
+    public Epic(Long id, String title, String description, Status status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
-        this.subtasks = subtasks;
         if (this.id == null || this.id == 0) {
             this.id = getId();
         }
