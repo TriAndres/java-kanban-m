@@ -36,7 +36,7 @@ public class Main {
                 6 - удалить задачу.
                 7 - вывод статистику всех задач.
                 8 - удалить все задачи.
-                0 - вызод из программы.
+                0 - выход из программы.
                 """);
         return new Scanner(System.in).next();
     }
@@ -83,7 +83,7 @@ public class Main {
             }
             System.out.println("Вывод всех задач.\n");
         } else {
-            System.out.println("Список пуст, добавте задачу.\n");
+            System.out.println("Список пуст, добавьте задачу.\n");
         }
 
     }
@@ -134,7 +134,7 @@ public class Main {
                 }
             }
         } else {
-            System.out.println("Список пуст, добавте задачу.");
+            System.out.println("Список пуст, добавьте задачу.");
         }
     }
 
@@ -172,19 +172,57 @@ public class Main {
                 System.out.println("Такой подзадачи нет с id=" + id);
             }
         } else {
-            System.out.println("Список пуст, добавте подзадачу.");
+            System.out.println("Список пуст, добавmте подзадачу.");
         }
     }
 
     private void deleteTaskById() {
-        System.out.println("В разработке.");
+        if (!taskManage.getTaskAll().isEmpty()) {
+            System.out.println("Введите id задачи:");
+            long id = Long.parseLong(new Scanner(System.in).next());
+            if (taskManage.getTaskAll().contains(taskManage.getTaskById(id))) {
+                taskManage.deleteTaskById(id);
+                taskManage.deleteEpicById(id);
+                for (Subtask subtask : taskManage.getListSubtaskIdEpic(id)) {
+                    taskManage.deleteSubtaskById(subtask.getId());
+                }
+            }
+        } else {
+            System.out.println("Список пуст, добавте подзадачу.");
+        }
     }
 
     private void showStatisticTaskAll() {
-        System.out.println("В разработке.");
+        System.out.println("getTaskAll()");
+        for (Task task : taskManage.getTaskAll()) {
+            System.out.println(task.toString());
+        }
+        System.out.println("getEpicAll()");
+        for (Epic epic : taskManage.getEpicAll()) {
+            System.out.println(epic.toString());
+            for (Subtask subtask : taskManage.getEpicById(epic.getId()).getSubtasks()) {
+                System.out.println(subtask.toString());
+            }
+        }
+        System.out.println("getSubtaskAll()");
+        for (Subtask subtask : taskManage.getSubtaskAll()) {
+            System.out.println(subtask.toString());
+        }
+        System.out.println("getHistory()");
+        for (Task task : taskManage.getHistory()) {
+            System.out.println(task.toString());
+        }
+        System.out.println("getListSubtaskIdEpic(Long id)");
+        for (Epic epic : taskManage.getEpicAll()) {
+            for (Subtask subtask : taskManage.getListSubtaskIdEpic(epic.getId())) {
+                System.out.println(subtask.toString());
+            }
+        }
     }
 
     private void deleteTaskAll() {
-        System.out.println("В разработке.");
+        taskManage.deleteTaskAll();
+        taskManage.deleteEpicAll();
+        taskManage.deleteSubtaskAll();
     }
 }
