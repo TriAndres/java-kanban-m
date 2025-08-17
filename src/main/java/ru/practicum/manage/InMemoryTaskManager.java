@@ -57,7 +57,7 @@ public class InMemoryTaskManager implements TaskManage {
         Long id = getTaskNextId();
         task.setId(id);
         taskMap.put(id, task);
-        historyManager.add(task);
+        historyManager.addHistory(task);
         return task;
     }
 
