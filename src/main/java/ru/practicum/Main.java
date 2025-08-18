@@ -28,7 +28,7 @@ public class Main {
 
     private String menu() {
         System.out.println("""
-                1 - вывод список задач.
+                1 - просмотр истории.
                 2 - добавить задачу.
                 3 - добавить подзадачу.
                 4 - вывод статистику задачи.
@@ -47,7 +47,7 @@ public class Main {
                 System.out.println("Выход из программы.");
                 break;
             case "1":
-                showTask();
+                showTaskHistory();
                 break;
             case "2":
                 addTask();
@@ -76,12 +76,12 @@ public class Main {
         }
     }
 
-    private void showTask() {
-        if (!taskManage.getTaskAll().isEmpty()) {
-            for (Task task : taskManage.getTaskAll()) {
+    private void showTaskHistory() {
+        if (!taskManage.getHistory().isEmpty()) {
+            for (Task task : taskManage.getHistory()) {
                 System.out.println(task.toString());
             }
-            System.out.println("Вывод всех задач.\n");
+            System.out.println("getHistory()\n");
         } else {
             System.out.println("Список пуст, добавьте задачу.\n");
         }
@@ -208,10 +208,7 @@ public class Main {
         for (Subtask subtask : taskManage.getSubtaskAll()) {
             System.out.println(subtask.toString());
         }
-        System.out.println("getHistory()");
-        for (Task task : taskManage.getHistory()) {
-            System.out.println(task.toString());
-        }
+
         System.out.println("getListSubtaskIdEpic(Long id)");
         for (Epic epic : taskManage.getEpicAll()) {
             for (Subtask subtask : taskManage.getListSubtaskIdEpic(epic.getId())) {
