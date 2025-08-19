@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    private List<Subtask> subtasks = new ArrayList<>();
+    private List<Subtask> subtasks;
 
     public Epic() {
-        this(null,null,null,null);
+        this(null,null,null,null, null);
         if (getTitle() == null) {
             this.title = "Эпик";
         }
@@ -16,11 +16,12 @@ public class Epic extends Task {
         }
     }
 
-    public Epic(Long id, String title, String description, Status status) {
+    public Epic(Long id, String title, String description, Status status, List<Subtask> subtasks) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
+        this.subtasks = subtasks;
         if (this.id == null || this.id == 0) {
             this.id = getId();
         }
@@ -29,6 +30,9 @@ public class Epic extends Task {
         }
         if (this.status == null) {
             this.status = Status.NEW;
+        }
+        if (this.subtasks == null) {
+            this.subtasks = new ArrayList<>();
         }
     }
 
