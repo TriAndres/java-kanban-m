@@ -5,11 +5,11 @@ import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ru.practicum.model.Status.DONE;
-import static ru.practicum.model.Status.NEW;
+import static ru.practicum.model.Status.*;
 
 class InMemoryTaskManagerTest {
     private final TaskManage taskManage = Managers.getDefault();
@@ -17,16 +17,19 @@ class InMemoryTaskManagerTest {
     @Test
     void createTaskEpicSubtask() {
         long taskId = 1L;
-        Task task = new Task(taskId, "Test-Task", "Test-Task-description", NEW);
-        taskManage.createTask(task);
-        Task task1 = taskManage.getTaskById(taskId);
         long epicId = 1L;
-        Epic epic = new Epic(epicId, "Test-Epic", "Test-Epic-description", NEW );
-        taskManage.createEpic(epic);
-        Epic epic1 = taskManage.getEpicById(epicId);
         long subtaskId = 1L;
-        Subtask subtask = new Subtask(subtaskId,"Test-Subtask", "Test-Subtask-description", NEW ,epic1.getId());
+
+        Task task = new Task(taskId, "Test-Task", "Test-Task-description", NEW);
+        Epic epic = new Epic(epicId, "Test-Epic", "Test-Epic-description", NEW, new ArrayList<>());
+        Subtask subtask = new Subtask(subtaskId,"Test-Subtask", "Test-Subtask-description", NEW ,epic.getId());
+
+        taskManage.createTask(task);
+        taskManage.createEpic(epic);
         taskManage.createSubtask(subtask);
+
+        Task task1 = taskManage.getTaskById(taskId);
+        Epic epic1 = taskManage.getEpicById(epicId);
         Subtask subtask1 = taskManage.getSubtaskById(subtaskId);
 
         assertEquals(task, task1);
@@ -48,16 +51,19 @@ class InMemoryTaskManagerTest {
     @Test
     void deleteTaskEpicSubtask() {
         long taskId = 1L;
-        Task task = new Task(taskId, "Test-Task", "Test-Task-description", NEW);
-        taskManage.createTask(task);
-        Task task1 = taskManage.getTaskById(taskId);
         long epicId = 1L;
-        Epic epic = new Epic(epicId, "Test-Epic", "Test-Epic-description", NEW );
-        taskManage.createEpic(epic);
-        Epic epic1 = taskManage.getEpicById(epicId);
         long subtaskId = 1L;
-        Subtask subtask = new Subtask(subtaskId,"Test-Subtask", "Test-Subtask-description", NEW ,epic1.getId());
+
+        Task task = new Task(taskId, "Test-Task", "Test-Task-description", NEW);
+        Epic epic = new Epic(epicId, "Test-Epic", "Test-Epic-description", NEW, new ArrayList<>());
+        Subtask subtask = new Subtask(subtaskId,"Test-Subtask", "Test-Subtask-description", NEW ,epic.getId());
+
+        taskManage.createTask(task);
+        taskManage.createEpic(epic);
         taskManage.createSubtask(subtask);
+
+        Task task1 = taskManage.getTaskById(taskId);
+        Epic epic1 = taskManage.getEpicById(epicId);
         Subtask subtask1 = taskManage.getSubtaskById(subtaskId);
 
         final List<Task> taskList = taskManage.getTaskAll();
@@ -89,16 +95,19 @@ class InMemoryTaskManagerTest {
     @Test
     void statusTaskEpicSubtask() {
         long taskId = 1L;
-        Task task = new Task(taskId, "Test-Task", "Test-Task-description", NEW);
-        taskManage.createTask(task);
-        Task task1 = taskManage.getTaskById(taskId);
         long epicId = 1L;
-        Epic epic = new Epic(epicId, "Test-Epic", "Test-Epic-description", NEW );
-        taskManage.createEpic(epic);
-        Epic epic1 = taskManage.getEpicById(epicId);
         long subtaskId = 1L;
-        Subtask subtask = new Subtask(subtaskId,"Test-Subtask", "Test-Subtask-description", NEW ,epic1.getId());
+
+        Task task = new Task(taskId, "Test-Task", "Test-Task-description", NEW);
+        Epic epic = new Epic(epicId, "Test-Epic", "Test-Epic-description", NEW, new ArrayList<>());
+        Subtask subtask = new Subtask(subtaskId,"Test-Subtask", "Test-Subtask-description", NEW ,epic.getId());
+
+        taskManage.createTask(task);
+        taskManage.createEpic(epic);
         taskManage.createSubtask(subtask);
+
+        Task task1 = taskManage.getTaskById(taskId);
+        Epic epic1 = taskManage.getEpicById(epicId);
         Subtask subtask1 = taskManage.getSubtaskById(subtaskId);
 
         assertEquals(task.getStatus(), task1.getStatus());
