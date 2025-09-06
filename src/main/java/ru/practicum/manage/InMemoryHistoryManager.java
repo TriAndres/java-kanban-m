@@ -30,8 +30,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() { /// ///////public List<Task> getHistory() {
-        return new ArrayList<>(getTasks());/////////return getTasks();
+    public List<Task> getHistory() {
+        return new ArrayList<>(getTasks());
     }
 
     private void linkLast(Task task) {

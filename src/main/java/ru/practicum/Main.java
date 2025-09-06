@@ -5,6 +5,7 @@ import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 import static ru.practicum.manage.Managers.getDefault;
@@ -95,6 +96,7 @@ public class Main {
         task.setDescription(description);
         Epic epic = new Epic();
         epic.setDescription(description);
+        epic.setIdTask(task.getId());
         System.out.println("Записано:\n" +
                 taskManage.createTask(task) + "\n" +
                 taskManage.createEpic(epic) + "\n");
@@ -105,7 +107,12 @@ public class Main {
         long id = Long.parseLong(new Scanner(System.in).next());
         if (taskManage.getTaskAll().contains(taskManage.getTaskById(id))) {
             Task task = taskManage.getTaskById(id);
-            Epic epic = taskManage.getEpicById(id);
+            Epic epic = taskManage
+                    .getEpicAll()
+                    .stream()
+                    .filter(i -> Objects.equals(i.getId(), task.getId()))
+                    .toList()
+                    .getFirst();
             Subtask subtask = new Subtask();
             subtask.setIdEpic(epic.getId());
             System.out.println("Введите название подзадачи:");
@@ -128,7 +135,12 @@ public class Main {
             if (taskManage.getTaskAll().contains(taskManage.getTaskById(id))) {
                 Task task = taskManage.getTaskById(id);
                 System.out.println(task.toString());
-                Epic epic = taskManage.getEpicById(id);
+                Epic epic = taskManage
+                        .getEpicAll()
+                        .stream()
+                        .filter(i -> Objects.equals(i.getId(), task.getId()))
+                        .toList()
+                        .getFirst();
                 for (Subtask subtask : epic.getSubtasks()) {
                     System.out.println(subtask.toString());
                 }
@@ -181,8 +193,15 @@ public class Main {
             System.out.println("Введите id задачи:");
             long id = Long.parseLong(new Scanner(System.in).next());
             if (taskManage.getTaskAll().contains(taskManage.getTaskById(id))) {
+                Task task = taskManage.getTaskById(id);
+                Epic epic = taskManage
+                        .getEpicAll()
+                        .stream()
+                        .filter(i -> Objects.equals(i.getId(), task.getId()))
+                        .toList()
+                        .getFirst();
                 taskManage.deleteTaskById(id);
-                taskManage.deleteEpicById(id);
+                taskManage.deleteEpicById(epic.getId());
                 for (Subtask subtask : taskManage.getListSubtaskIdEpic(id)) {
                     taskManage.deleteSubtaskById(subtask.getId());
                 }
