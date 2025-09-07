@@ -1,24 +1,24 @@
 package ru.practicum.manage;
 
+import ru.practicum.model.Node;
 import ru.practicum.model.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final Map<Long, Node> history = new HashMap<>();
-    private Node head;
-    private Node tail;
+    private final Map<Long, Node<Task>> history = new HashMap<>();
+    private Node<Task> head;
+    private Node<Task> tail;
 
     @Override
     public void addHistory(Task task) {
         if (task != null) {
-            if (history.containsKey(task.getId())) {
-                removeNode(history.remove(task.getId()));
+            long id = task.getId();
+            if (history.containsKey(id)) {
+                removeNode(history.remove(id));
             }
-            linkLast(task);
+            //linkLast(task);
+            history.put(id, linkLast(task));
         }
     }
 
@@ -26,56 +26,66 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void removeHistory(long id) {
         if (history.containsKey(id)) {
             removeNode(history.remove(id));
+            history.remove(id);
         }
     }
 
     @Override
     public List<Task> getHistory() {
-        return new ArrayList<>(getTasks());
+        List<Task> list = new ArrayList<>();
+        Node<Task> newNode = head;
+        while (newNode != null) {
+            list.add(newNode.getDate());
+            newNode = newNode.getNext();
+        }
+        return list;
     }
 
-    private void linkLast(Task task) {
-        if (history.isEmpty()) {
-            Node firstNode = new Node(task, null, null);
-            head = firstNode;
-            tail = firstNode;
-            history.put(task.getId(), firstNode);
+    //private void linkLast(Task task) {
+    private Node<Task> linkLast(Task task) {
+//        if (history.isEmpty()) {
+//            Node firstNode = new Node(task, null, null);
+//            head = firstNode;
+//            tail = firstNode;
+//            history.put(task.getId(), firstNode);
+//        } else {
+//            Node nextNode = new Node(task, tail, null);
+//            tail.setNext(nextNode);
+//            history.put(tail.getDate().getId(), tail);
+//            tail = nextNode;
+//            history.put(task.getId(), nextNode);
+//        }
+
+        if (head == null) {
+            head = new Node<>(task, null, null);
+            return head;
+        } else if (tail == null) {
+            tail = new Node<>(task, null, head);
+            head.setNext(tail);
+            return tail;
         } else {
-            Node nextNode = new Node(task, tail, null);
-            tail.nextTask = nextNode;
-            history.put(tail.task.getId(), tail);
-            tail = nextNode;
-            history.put(task.getId(),nextNode);
+            final Node<Task> oldTail = tail;
+            final Node<Task> newNode = new Node<>(task, null, oldTail);
+            oldTail.setNext(newNode);
+            tail = newNode;
+            return newNode;
         }
     }
 
-    private List<Task> getTasks() {
-        List<Task> tasks = new ArrayList<>();
-        Node saved = head;
-        if (head != null) {
-            tasks.add(head.task);
-            while (saved.nextTask != null) {
-                saved = saved.nextTask;
-                tasks.add(saved.task);
-            }
-        }
-        return new ArrayList<>(tasks);
-    }
-
-    private void removeNode(Node node) {
+    private void removeNode(Node<Task> node) {
         if (node.equals(head) && node.equals(tail)) {
             head = null;
             tail = null;
         } else if (node.equals(head)) {
-            node.nextTask.prevTask = null;
-            head = node.nextTask;
+            node.getNext().setPrev(null);
+            head = node.getNext();
         } else if (node.equals(tail)) {
-            node.prevTask.nextTask = null;
-            tail = node.prevTask;
+            node.getPrev().setNext(null);
+            tail = node.getPrev();
         } else {
-            node.prevTask.nextTask = node.nextTask;
-            node.nextTask.prevTask = node.prevTask;
+            node.getPrev().setNext(node.getNext());
+            node.getNext().setPrev(node.getPrev());
         }
-        history.remove(node.task.getId());
+        history.remove(node.getDate().getId());
     }
 }
