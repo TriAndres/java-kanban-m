@@ -2,9 +2,10 @@ package ru.practicum.manage;
 
 import ru.practicum.model.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface HistoryManager {
     void addHistory(Task task);
-    ArrayList<Task> getHistory();
+    void removeHistory(long id);
+    List<Task> getHistory();
 }

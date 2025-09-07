@@ -5,9 +5,10 @@ import java.util.List;
 
 public class Epic extends Task {
     private List<Subtask> subtasks;
+    private Long idTask;
 
     public Epic() {
-        this(null,null,null,null, null);
+        this(null,null,null,null, null, null);
         if (getTitle() == null) {
             this.title = "Эпик";
         }
@@ -16,12 +17,13 @@ public class Epic extends Task {
         }
     }
 
-    public Epic(Long id, String title, String description, Status status, List<Subtask> subtasks) {
+    public Epic(Long id, String title, String description, Status status, List<Subtask> subtasks, Long idTask) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
         this.subtasks = subtasks;
+        this.idTask = idTask;
         if (this.id == null || this.id == 0) {
             this.id = getId();
         }
@@ -42,5 +44,13 @@ public class Epic extends Task {
 
     public void setSubtasks(List<Subtask> subtasks) {
         this.subtasks = subtasks;
+    }
+
+    public Long getIdTask() {
+        return idTask;
+    }
+
+    public void setIdTask(Long idTask) {
+        this.idTask = idTask;
     }
 }
