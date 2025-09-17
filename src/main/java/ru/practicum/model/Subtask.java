@@ -1,23 +1,34 @@
 package ru.practicum.model;
 
 public class Subtask extends Task {
-    private Long idEpic;
 
     public Subtask() {
-        this(null,null,null,null,null);
-        if (title == null) {
+        this(null,null,null,null,null, null);
+        if (getTaskType() == null) {
+            this.taskType = TaskType.SUBTASK;
+        }
+        if (getTitle() == null) {
             this.title = "Подзадача";
         }
-        if (this.status == null) {
+        if (getStatus() == null) {
             this.status = Status.NEW;
         }
+
     }
 
-    public Subtask(Long id, String title, String description, Status status, Long idEpic) {
-        this.idEpic = idEpic;
+    public Subtask(Long id, TaskType taskType, String title, Status status, String description, Long idEpic) {
+        this.id = id;
+        this.taskType = taskType;
+        this.title = title;
+        this.status = status;
+        this.description = description;
+        this.taskId = idEpic;
         if (this.id == null || this.id == 0) {
             this.id = getId();
         }
+        if (this.taskType == null) {
+            this.taskType = TaskType.SUBTASK;
+        }
         if (title == null) {
             this.title = "Подзадача";
         }
@@ -26,11 +37,14 @@ public class Subtask extends Task {
         }
     }
 
-    public Long getIdEpic() {
-        return idEpic;
-    }
-
-    public void setIdEpic(Long idEpic) {
-        this.idEpic = idEpic;
+    @Override
+    public String toString() {
+        return id +
+                "/" + taskType +
+                "/" + title +
+                "/" + status +
+                "/" + description +
+                "/" + taskId +
+                "\n";
     }
 }

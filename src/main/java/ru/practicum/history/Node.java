@@ -1,8 +1,10 @@
-package ru.practicum.model;
+package ru.practicum.history;
+
+import ru.practicum.model.Task;
 
 import java.util.Objects;
 
-public class Node<T extends  Task> {
+public class Node<T extends Task> {
     private T date;
     private Node<T> next;
     private Node<T> prev;
