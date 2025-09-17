@@ -1,6 +1,5 @@
-package ru.practicum.manage;
+package ru.practicum.history;
 
-import ru.practicum.model.Node;
 import ru.practicum.model.Task;
 
 import java.util.*;

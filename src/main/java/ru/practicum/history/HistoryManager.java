@@ -1,4 +1,4 @@
-package ru.practicum.manage;
+package ru.practicum.history;
 
 import ru.practicum.model.Task;
 

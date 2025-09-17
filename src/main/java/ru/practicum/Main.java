@@ -1,6 +1,6 @@
 package ru.practicum;
 
-import ru.practicum.manage.TaskManage;
+import ru.practicum.memory.TaskManage;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
@@ -8,76 +8,76 @@ import ru.practicum.model.Task;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static ru.practicum.manage.Managers.getDefault;
+import static ru.practicum.controller.Managers.getDefault;
 import static ru.practicum.model.Status.DONE;
 import static ru.practicum.model.Status.NEW;
 
 public class Main {
-//    TaskManage taskManage = getDefault();
-//
-//    public static void main(String[] args) {
-//        new Main().game();
-//    }
-//
-//    public void game() {
-//        while (true) {
-//            String line = menu();
-//            select(line);
-//            if (line.equals("0")) break;
-//        }
-//    }
-//
-//    private String menu() {
-//        System.out.println("""
-//                1 - просмотр истории.
-//                2 - добавить задачу.
-//                3 - добавить подзадачу.
-//                4 - вывод статистику задачи.
-//                5 - добавить статус подзадаче.
-//                6 - удалить задачу.
-//                7 - вывод статистику всех задач.
-//                8 - удалить все задачи.
-//                0 - выход из программы.
-//                """);
-//        return new Scanner(System.in).next();
-//    }
-//
-//    private void select(String line) {
-//        switch (line) {
-//            case "0":
-//                System.out.println("Выход из программы.");
-//                break;
-//            case "1":
-//                showTaskHistory();
-//                break;
-//            case "2":
-//                addTask();
-//                break;
-//            case "3":
-//                addSubtask();
-//                break;
-//            case "4":
-//                showStatisticTaskId();
-//                break;
-//            case "5":
-//                addStatusSubtask();
-//                break;
-//            case "6":
-//                deleteTaskById();
-//                break;
-//            case "7":
-//                showStatisticTaskAll();
-//                break;
-//            case "8":
-//                deleteTaskAll();
-//                break;
-//            default:
-//                System.out.println("выбирите действие из списка.");
-//                break;
-//        }
-//    }
-//
-//    private void showTaskHistory() {
+    TaskManage taskManage = getDefault();
+
+    public static void main(String[] args) {
+        new Main().game();
+    }
+
+    public void game() {
+        while (true) {
+            String line = menu();
+            select(line);
+            if (line.equals("0")) break;
+        }
+    }
+
+    private String menu() {
+        System.out.println("""
+                1 - просмотр истории.
+                2 - добавить задачу.
+                3 - добавить подзадачу.
+                4 - вывод статистику задачи.
+                5 - добавить статус подзадаче.
+                6 - удалить задачу.
+                7 - вывод статистику всех задач.
+                8 - удалить все задачи.
+                0 - выход из программы.
+                """);
+        return new Scanner(System.in).next();
+    }
+
+    private void select(String line) {
+        switch (line) {
+            case "0":
+                System.out.println("Выход из программы.");
+                break;
+            case "1":
+                showTaskHistory();
+                break;
+            case "2":
+                addTask();
+                break;
+            case "3":
+                addSubtask();
+                break;
+            case "4":
+                showStatisticTaskId();
+                break;
+            case "5":
+                addStatusSubtask();
+                break;
+            case "6":
+                deleteTaskById();
+                break;
+            case "7":
+                showStatisticTaskAll();
+                break;
+            case "8":
+                deleteTaskAll();
+                break;
+            default:
+                System.out.println("выбирите действие из списка.");
+                break;
+        }
+    }
+
+    private void showTaskHistory() {
 //        if (!taskManage.getHistory().isEmpty()) {
 //            for (Task task : taskManage.getHistory()) {
 //                System.out.println(task.toString());
@@ -86,10 +86,9 @@ public class Main {
 //        } else {
 //            System.out.println("Список пуст, добавьте задачу.\n");
 //        }
-//
-//    }
-//
-//    private void addTask() {
+    }
+
+    private void addTask() {
 //        System.out.println("Введите название задачи:");
 //        String description = new Scanner(System.in).nextLine();
 //        Task task = new Task();
@@ -100,9 +99,9 @@ public class Main {
 //        System.out.println("Записано:\n" +
 //                taskManage.createTask(task) + "\n" +
 //                taskManage.createEpic(epic) + "\n");
-//    }
-//
-//    private void addSubtask() {
+    }
+
+    private void addSubtask() {
 //        System.out.println("Введите id задачи для ввода подзадачи:");
 //        long id = Long.parseLong(new Scanner(System.in).next());
 //        if (taskManage.getTaskAll().contains(taskManage.getTaskById(id))) {
@@ -126,9 +125,9 @@ public class Main {
 //                System.out.println(subtask1.toString());
 //            }
 //        }
-//    }
-//
-//    private void showStatisticTaskId() {
+    }
+
+    private void showStatisticTaskId() {
 //        if (!taskManage.getTaskAll().isEmpty()) {
 //            System.out.println("Введите id задачи:");
 //            long id = Long.parseLong(new Scanner(System.in).next());
@@ -148,9 +147,9 @@ public class Main {
 //        } else {
 //            System.out.println("Список пуст, добавьте задачу.");
 //        }
-//    }
-//
-//    private void addStatusSubtask() {
+    }
+
+    private void addStatusSubtask() {
 //        if (!taskManage.getSubtaskAll().isEmpty()) {
 //            System.out.println("Введите id подзадачи:");
 //            long id = Long.parseLong(new Scanner(System.in).next());
@@ -186,9 +185,9 @@ public class Main {
 //        } else {
 //            System.out.println("Список пуст, добавmте подзадачу.");
 //        }
-//    }
-//
-//    private void deleteTaskById() {
+    }
+
+    private void deleteTaskById() {
 //        if (!taskManage.getTaskAll().isEmpty()) {
 //            System.out.println("Введите id задачи:");
 //            long id = Long.parseLong(new Scanner(System.in).next());
@@ -209,9 +208,9 @@ public class Main {
 //        } else {
 //            System.out.println("Список пуст, добавте подзадачу.");
 //        }
-//    }
-//
-//    private void showStatisticTaskAll() {
+    }
+
+    private void showStatisticTaskAll() {
 //        System.out.println("getTaskAll()");
 //        for (Task task : taskManage.getTaskAll()) {
 //            System.out.println(task.toString());
@@ -234,11 +233,11 @@ public class Main {
 //                System.out.println(subtask.toString());
 //            }
 //        }
-//    }
-//
-//    private void deleteTaskAll() {
+    }
+
+    private void deleteTaskAll() {
 //        taskManage.deleteTaskAll();
 //        taskManage.deleteEpicAll();
 //        taskManage.deleteSubtaskAll();
-//    }
+    }
 }

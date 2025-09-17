@@ -1,31 +1,37 @@
 package ru.practicum.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Epic extends Task {
-    private List<Subtask> subtasks;
-    private Long idTask;
 
     public Epic() {
-        this(null,null,null,null, null, null);
+        this(null,null,null,null,  null, null);
+        if (getTaskType() == null) {
+            this.taskType = TaskType.EPIC;
+        }
         if (getTitle() == null) {
             this.title = "Эпик";
         }
         if (getStatus() == null) {
             this.status = Status.NEW;
         }
+        if (this.subtaskIdList == null) {
+            this.subtaskIdList = new ArrayList<>();
+        }
     }
 
-    public Epic(Long id, String title, String description, Status status, List<Subtask> subtasks, Long idTask) {
+    public Epic(Long id, TaskType taskType, String title, Status status, String description, Long idTask) {
         this.id = id;
+        this.taskType = taskType;
         this.title = title;
-        this.description = description;
         this.status = status;
-        this.subtasks = subtasks;
-        this.idTask = idTask;
+        this.description = description;
+        this.taskId = idTask;
         if (this.id == null || this.id == 0) {
             this.id = getId();
+        }
+        if (this.taskType == null) {
+            this.taskType = TaskType.EPIC;
         }
         if (this.title == null) {
             this.title = "Эпик";
@@ -33,24 +39,19 @@ public class Epic extends Task {
         if (this.status == null) {
             this.status = Status.NEW;
         }
-        if (this.subtasks == null) {
-            this.subtasks = new ArrayList<>();
+        if (this.subtaskIdList == null) {
+            this.subtaskIdList = new ArrayList<>();
         }
     }
 
-    public List<Subtask> getSubtasks() {
-        return subtasks;
-    }
-
-    public void setSubtasks(List<Subtask> subtasks) {
-        this.subtasks = subtasks;
-    }
-
-    public Long getIdTask() {
-        return idTask;
-    }
-
-    public void setIdTask(Long idTask) {
-        this.idTask = idTask;
+    @Override
+    public String toString() {
+        return id +
+                "/" + taskType +
+                "/" + title  +
+                "/" + status +
+                "/" + description +
+                "/" + taskId +
+                "\n";
     }
 }

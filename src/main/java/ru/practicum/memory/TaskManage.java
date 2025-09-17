@@ -1,10 +1,9 @@
-package ru.practicum.manage;
+package ru.practicum.memory;
 
 import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface TaskManage {
@@ -27,6 +26,7 @@ public interface TaskManage {
     void deleteEpicAll();
     void deleteSubtaskAll();
     List<Task> getHistory();
-
+    void addHistory(long id);
+    void removeHistory(long id);
     List<Subtask> getListSubtaskIdEpic(Long id);
 }
