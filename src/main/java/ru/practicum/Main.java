@@ -1,5 +1,6 @@
 package ru.practicum;
 
+import ru.practicum.fileCSV.FileBackedTaskManager;
 import ru.practicum.memory.TaskManage;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
@@ -8,12 +9,13 @@ import ru.practicum.model.Task;
 import java.util.Objects;
 import java.util.Scanner;
 
+import static ru.practicum.controller.Managers.detDefaultFile;
 import static ru.practicum.controller.Managers.getDefault;
 import static ru.practicum.model.Status.DONE;
 import static ru.practicum.model.Status.NEW;
 
 public class Main {
-    TaskManage taskManage = getDefault();
+    TaskManage manage = detDefaultFile();
 
     public static void main(String[] args) {
         new Main().game();
@@ -78,27 +80,27 @@ public class Main {
     }
 
     private void showTaskHistory() {
-//        if (!taskManage.getHistory().isEmpty()) {
-//            for (Task task : taskManage.getHistory()) {
-//                System.out.println(task.toString());
-//            }
-//            System.out.println("getHistory()\n");
-//        } else {
-//            System.out.println("Список пуст, добавьте задачу.\n");
-//        }
+        if (!manage.getHistory().isEmpty()) {
+            for (Task task : manage.getHistory()) {
+                System.out.println(task.toString());
+            }
+            System.out.println("getHistory()\n");
+        } else {
+            System.out.println("Список пуст, добавьте задачу.\n");
+        }
     }
 
     private void addTask() {
-//        System.out.println("Введите название задачи:");
-//        String description = new Scanner(System.in).nextLine();
-//        Task task = new Task();
-//        task.setDescription(description);
-//        Epic epic = new Epic();
-//        epic.setDescription(description);
-//        epic.setIdTask(task.getId());
-//        System.out.println("Записано:\n" +
-//                taskManage.createTask(task) + "\n" +
-//                taskManage.createEpic(epic) + "\n");
+        System.out.println("Введите название задачи:");
+        String description = new Scanner(System.in).nextLine();
+        Task task = new Task();
+        task.setDescription(description);
+        Epic epic = new Epic();
+        epic.setDescription(description);
+        epic.setTaskId(task.getId());
+        System.out.println("Записано:\n" +
+                manage.createTask(task) + "\n" +
+                manage.createEpic(epic) + "\n");
     }
 
     private void addSubtask() {

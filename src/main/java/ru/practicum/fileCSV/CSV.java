@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CSV {
     public static String toString(Task task) {
-        if (task.getTaskType().equals(TaskType.EPIC)) {
+        if (task.getTaskType().equals(TaskType.TASK)) {
             String[] toJoin = {
                     String.valueOf(task.getId()),
                     String.valueOf(task.getTaskType()),
@@ -16,7 +16,7 @@ public class CSV {
                     task.getDescription()
             };
             return String.join(",", toJoin) + "\n";
-        } else if (task.getTaskType().equals(TaskType.SUBTASK)) {
+        } else if (task.getTaskType().equals(TaskType.EPIC)) {
             String[] toJoin = {
                     String.valueOf(task.getId()),
                     String.valueOf(task.getTaskType()),
@@ -26,7 +26,7 @@ public class CSV {
                     String.valueOf(task.getTaskId())
             };
             return String.join(",", toJoin) + "\n";
-        } else if (task.getTaskType().equals(TaskType.TASK)) {
+        } else if (task.getTaskType().equals(TaskType.SUBTASK)) {
             String[] toJoin = {
                     String.valueOf(task.getId()),
                     String.valueOf(task.getTaskType()),

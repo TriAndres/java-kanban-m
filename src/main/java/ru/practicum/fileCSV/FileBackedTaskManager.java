@@ -24,6 +24,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             writer.write(FIRST_LINE);
             for (Task task : super.getTaskAll()) {
                 if (task != null) {
+                    System.out.println(task.toString());
                     writer.write(Objects.requireNonNull(CSV.toString(task)));
                 }
             }
