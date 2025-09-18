@@ -3,7 +3,9 @@ package ru.practicum.model;
 public class Subtask extends Task {
 
     public Subtask() {
-        this(null,null,null,null,null, null);
+        if (this.id == null || this.id == 0) {
+            this.id = getId();
+        }
         if (getTaskType() == null) {
             this.taskType = TaskType.SUBTASK;
         }

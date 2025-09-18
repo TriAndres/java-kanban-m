@@ -93,14 +93,23 @@ public class Main {
     private void addTask() {
         System.out.println("Введите название задачи:");
         String description = new Scanner(System.in).nextLine();
-        Task task = new Task();
+
+        Task task = new Task(
+                null,
+                null,
+                null,
+                null,
+                description
+        );
         task.setDescription(description);
+        task = manage.createTask(task);
+
         Epic epic = new Epic();
         epic.setDescription(description);
         epic.setTaskId(task.getId());
-        System.out.println("Записано:\n" +
-                manage.createTask(task) + "\n" +
-                manage.createEpic(epic) + "\n");
+        epic = manage.createEpic(epic);
+
+        System.out.println("Записано:\n" + task + epic);
     }
 
     private void addSubtask() {

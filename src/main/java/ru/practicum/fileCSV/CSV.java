@@ -42,9 +42,6 @@ public class CSV {
 
     public Task fromString(String value) {
         String[] line = value.split(",");
-        if (line[0].equals("type")) {
-            return null;
-        }
         if (line[1].equals("TASK")) {
             return new Task(
                     Long.parseLong(line[0]),
@@ -56,7 +53,7 @@ public class CSV {
         }
 
         if (line[1].equals("EPIC")) {
-            return  new Epic(
+            return new Epic(
                     Long.parseLong(line[0]),
                     TaskType.valueOf(line[1]),
                     line[2],
@@ -67,7 +64,7 @@ public class CSV {
         }
 
         if (line[1].equals("SUBTASK")) {
-            return  new Subtask(
+            return new Subtask(
                     Long.parseLong(line[0]),
                     TaskType.valueOf(line[1]),
                     line[2],

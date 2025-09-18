@@ -8,6 +8,8 @@ import ru.practicum.memory.InMemoryTaskManager;
 
 import java.io.File;
 
+import static ru.practicum.fileCSV.FileBackedTaskManager.loadFromFile;
+
 public class Managers {
     public static File file = new File("src\\main\\java\\ru\\practicum\\fileCSV\\test.csv");
     public static TaskManage getDefault() {
@@ -19,6 +21,6 @@ public class Managers {
     }
 
     public static TaskManage detDefaultFile() {
-        return new FileBackedTaskManager(file);
+        return loadFromFile(file);
     }
 }

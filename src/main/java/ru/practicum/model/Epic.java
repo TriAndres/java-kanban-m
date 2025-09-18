@@ -5,14 +5,16 @@ import java.util.ArrayList;
 public class Epic extends Task {
 
     public Epic() {
-        this(null,null,null,null,  null, null);
-        if (getTaskType() == null) {
+        if (this.id == null || this.id == 0) {
+            this.id = getId();
+        }
+        if (this.taskType == null) {
             this.taskType = TaskType.EPIC;
         }
-        if (getTitle() == null) {
+        if (this.title == null) {
             this.title = "Эпик";
         }
-        if (getStatus() == null) {
+        if (this.status == null) {
             this.status = Status.NEW;
         }
         if (this.subtaskIdList == null) {

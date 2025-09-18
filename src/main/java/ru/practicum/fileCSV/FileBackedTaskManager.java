@@ -24,7 +24,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             writer.write(FIRST_LINE);
             for (Task task : super.getTaskAll()) {
                 if (task != null) {
-                    System.out.println(task.toString());
                     writer.write(Objects.requireNonNull(CSV.toString(task)));
                 }
             }
@@ -161,7 +160,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
         CSV csv = new CSV();
         try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))){
