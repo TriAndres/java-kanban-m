@@ -5,86 +5,89 @@ import ru.practicum.model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final Map<Long, Node<Task>> history = new HashMap<>();
-    private Node<Task> head;
-    private Node<Task> tail;
+    private final Map<Long, Node<Task>> historyMap = new HashMap<>();
+    private Node<Task> first;
+    private Node<Task> last;
 
     @Override
     public void addHistory(Task task) {
-        if (task != null) {
+        if (Objects.nonNull(task)) {
             long id = task.getId();
-            if (history.containsKey(id)) {
-                removeNode(history.remove(id));
+            if (historyMap.containsKey(id)) {
+                removeHistory(id);
+            } else {
+                historyMap.put(id, linkLast(task));
             }
-            //linkLast(task);
-            history.put(id, linkLast(task));
         }
+
     }
 
     @Override
     public void removeHistory(long id) {
-        if (history.containsKey(id)) {
-            removeNode(history.remove(id));
-            history.remove(id);
+        if (historyMap.containsKey(id)) {
+            removeNode(historyMap.get(id));
+            historyMap.remove(id);
         }
     }
 
     @Override
-    public List<Task> getHistory() {
-        List<Task> list = new ArrayList<>();
-        Node<Task> newNode = head;
-        while (newNode != null) {
-            list.add(newNode.getDate());
-            newNode = newNode.getNext();
+    public List<Task> getHistoryMap() {
+        List<Task> tasks = new ArrayList<>();
+        Node<Task> saved = first;
+        if (first != null) {
+            tasks.add(first.element);
+            while (saved.next != null) {
+                saved = saved.next;
+                tasks.add(saved.element);
+            }
         }
-        return list;
+        return new ArrayList<>(tasks);
     }
 
-    //private void linkLast(Task task) {
     private Node<Task> linkLast(Task task) {
-//        if (history.isEmpty()) {
-//            Node firstNode = new Node(task, null, null);
-//            head = firstNode;
-//            tail = firstNode;
-//            history.put(task.getId(), firstNode);
-//        } else {
-//            Node nextNode = new Node(task, tail, null);
-//            tail.setNext(nextNode);
-//            history.put(tail.getDate().getId(), tail);
-//            tail = nextNode;
-//            history.put(task.getId(), nextNode);
-//        }
-
-        if (head == null) {
-            head = new Node<>(task, null, null);
-            return head;
-        } else if (tail == null) {
-            tail = new Node<>(task, null, head);
-            head.setNext(tail);
-            return tail;
+        if (historyMap.isEmpty()) {
+            final Node<Task> f = first;
+            final Node<Task> newNode = new Node<>(null, task, f);
+            first = newNode;
+            if (f == null)
+                last = newNode;
+            else
+                f.prev = newNode;
+            return newNode;
         } else {
-            final Node<Task> oldTail = tail;
-            final Node<Task> newNode = new Node<>(task, null, oldTail);
-            oldTail.setNext(newNode);
-            tail = newNode;
+            final Node<Task> l = last;
+            final Node<Task> newNode = new Node<>(l, task, null);
+            last = newNode;
+            if (l == null)
+                first = newNode;
+            else
+                l.next = newNode;
             return newNode;
         }
     }
 
-    private void removeNode(Node<Task> node) {
-        if (node.equals(head) && node.equals(tail)) {
-            head = null;
-            tail = null;
-        } else if (node.equals(head)) {
-            node.getNext().setPrev(null);
-            head = node.getNext();
-        } else if (node.equals(tail)) {
-            node.getPrev().setNext(null);
-            tail = node.getPrev();
-        } else {
-            node.getPrev().setNext(node.getNext());
-            node.getNext().setPrev(node.getPrev());
+    private void removeNode(Node<Task> task) {
+        final Task element = task.element;
+        final Node<Task> prev = task.prev;
+        task.element = null;
+        task.prev = null; // help GC
+        last = prev;
+        if (prev == null)
+            first = null;
+        else
+            prev.next = null;
+        historyMap.remove(element.getId());
+    }
+
+    private static class Node<E extends Task> {
+        E element;
+        Node<E> next;
+        Node<E> prev;
+
+        Node(Node<E> prev, E element, Node<E> next) {
+            this.element = element;
+            this.next = next;
+            this.prev = prev;
         }
-        history.remove(node.getDate().getId());
     }
 }

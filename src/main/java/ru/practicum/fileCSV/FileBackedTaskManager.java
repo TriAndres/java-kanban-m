@@ -160,7 +160,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
         CSV csv = new CSV();
         try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))){
