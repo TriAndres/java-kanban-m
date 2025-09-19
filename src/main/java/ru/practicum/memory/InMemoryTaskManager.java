@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class InMemoryTaskManager implements TaskManage {
     private static long idCount;
-    private final HashMap<Long, Task> taskMap = new HashMap<>();
+    private final HashMap<Long, Task> taskHashMap = new HashMap<>();
     private final HashMap<Long, Subtask> subtaskMap = new HashMap<>();
     private final HashMap<Long, Epic> epicMap = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
@@ -22,8 +22,8 @@ public class InMemoryTaskManager implements TaskManage {
     @Override
     public List<Task> getTaskAll() {
         ArrayList<Task> list = new ArrayList<>();
-        for (Long key : taskMap.keySet()) {
-            Task task = taskMap.get(key);
+        for (Long key : taskHashMap.keySet()) {
+            Task task = taskHashMap.get(key);
             addHistory(task.getId());
             list.add(task);
         }
@@ -56,7 +56,7 @@ public class InMemoryTaskManager implements TaskManage {
     public Task createTask(Task task) {
         Long id = getNextId();
         task.setId(id);
-        taskMap.put(id, task);
+        taskHashMap.put(id, task);
         return task;
     }
 
@@ -88,8 +88,8 @@ public class InMemoryTaskManager implements TaskManage {
 
     @Override
     public void updateTask(Task task) {
-        if (taskMap.containsKey(task.getId())) {
-            taskMap.put(task.getId(), task);
+        if (taskHashMap.containsKey(task.getId())) {
+            taskHashMap.put(task.getId(), task);
         } else {
             System.out.println("task not id=" + task.getId());
         }
@@ -123,8 +123,8 @@ public class InMemoryTaskManager implements TaskManage {
 
     @Override
     public Task getTaskById(Long id) {
-        if (taskMap.containsKey(id)) {
-            Task task = taskMap.get(id);
+        if (taskHashMap.containsKey(id)) {
+            Task task = taskHashMap.get(id);
             addHistory(task.getId());
             return task;
         }
@@ -158,7 +158,7 @@ public class InMemoryTaskManager implements TaskManage {
     @Override
     public void deleteTaskById(Long id) {
         removeHistory(id);
-        taskMap.remove(id);
+        taskHashMap.remove(id);
     }
 
     @Override
@@ -197,10 +197,10 @@ public class InMemoryTaskManager implements TaskManage {
 
     @Override
     public void deleteTaskAll() {
-        for (Long id : taskMap.keySet()) {
+        for (Long id : taskHashMap.keySet()) {
             removeHistory(id);
         }
-        taskMap.clear();
+        taskHashMap.clear();
     }
 
     @Override
@@ -229,7 +229,7 @@ public class InMemoryTaskManager implements TaskManage {
 
     @Override
     public List<Task> getHistory() {
-        return new ArrayList<>(historyManager.getHistoryMap());
+        return historyManager.getHistoryMap();
     }
 
     @Override
@@ -238,8 +238,8 @@ public class InMemoryTaskManager implements TaskManage {
             historyManager.addHistory(epicMap.get(id));
         } else if (subtaskMap.containsKey(id)) {
             historyManager.addHistory(subtaskMap.get(id));
-        } else if (taskMap.containsKey(id)) {
-            historyManager.addHistory(taskMap.get(id));
+        } else if (taskHashMap.containsKey(id)) {
+            historyManager.addHistory(taskHashMap.get(id));
         }
     }
 
@@ -270,8 +270,8 @@ public class InMemoryTaskManager implements TaskManage {
             int countStatusDone = 0;
             if (list == null) {
                 epic.setStatus(Status.NEW);
-                if (taskMap.containsKey(epic.getTaskId())) {
-                    Task task = taskMap.get(epic.getTaskId());
+                if (taskHashMap.containsKey(epic.getTaskId())) {
+                    Task task = taskHashMap.get(epic.getTaskId());
                     task.setStatus(Status.NEW);
                 }
             } else {
@@ -280,8 +280,8 @@ public class InMemoryTaskManager implements TaskManage {
                         countStatusNew++;
                         if (countStatusNew == list.size()) {
                             epic.setStatus(Status.NEW);
-                            if (taskMap.containsKey(epic.getTaskId())) {
-                                Task task = taskMap.get(epic.getTaskId());
+                            if (taskHashMap.containsKey(epic.getTaskId())) {
+                                Task task = taskHashMap.get(epic.getTaskId());
                                 task.setStatus(Status.NEW);
                             }
                         }
@@ -291,16 +291,16 @@ public class InMemoryTaskManager implements TaskManage {
                             countStatusDone++;
                             if (countStatusDone == list.size()) {
                                 epic.setStatus(Status.DONE);
-                                if (taskMap.containsKey(epic.getTaskId())) {
-                                    Task task = taskMap.get(epic.getTaskId());
+                                if (taskHashMap.containsKey(epic.getTaskId())) {
+                                    Task task = taskHashMap.get(epic.getTaskId());
                                     task.setStatus(Status.DONE);
                                 }
                             }
                         }
                     } else {
                         epic.setStatus(Status.IN_PROGRESS);
-                        if (taskMap.containsKey(epic.getTaskId())) {
-                            Task task = taskMap.get(epic.getTaskId());
+                        if (taskHashMap.containsKey(epic.getTaskId())) {
+                            Task task = taskHashMap.get(epic.getTaskId());
                             task.setStatus(Status.IN_PROGRESS);
                         }
                     }

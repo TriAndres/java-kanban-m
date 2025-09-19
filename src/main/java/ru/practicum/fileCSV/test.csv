@@ -1,6 +1,0 @@
-id,type,name,status,description,epic
-1,TASK,Задача,NEW,222
-3,TASK,Задача,NEW,333
-2,EPIC,Эпик,NEW,222,1
-4,EPIC,Эпик,NEW,333,3
-History 2,4,

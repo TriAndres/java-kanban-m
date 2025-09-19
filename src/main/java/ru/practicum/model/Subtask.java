@@ -3,36 +3,23 @@ package ru.practicum.model;
 public class Subtask extends Task {
 
     public Subtask() {
-        if (this.id == null || this.id == 0) {
-            this.id = getId();
-        }
-        if (getTaskType() == null) {
-            this.taskType = TaskType.SUBTASK;
-        }
-        if (getTitle() == null) {
-            this.title = "Подзадача";
-        }
-        if (getStatus() == null) {
-            this.status = Status.NEW;
-        }
-
     }
 
-    public Subtask(Long id, TaskType taskType, String title, Status status, String description, Long idEpic) {
+    public Subtask(Long id, TaskType type, String name, Status status, String description, Long idEpic) {
         this.id = id;
-        this.taskType = taskType;
-        this.title = title;
+        this.type = type;
+        this.name = name;
         this.status = status;
         this.description = description;
         this.taskId = idEpic;
         if (this.id == null || this.id == 0) {
             this.id = getId();
         }
-        if (this.taskType == null) {
-            this.taskType = TaskType.SUBTASK;
+        if (this.type == null) {
+            this.type = TaskType.SUBTASK;
         }
-        if (title == null) {
-            this.title = "Подзадача";
+        if (this.name == null) {
+            this.name = "Подзадача";
         }
         if (this.status == null) {
             this.status = Status.NEW;
@@ -42,8 +29,8 @@ public class Subtask extends Task {
     @Override
     public String toString() {
         return id +
-                "/" + taskType +
-                "/" + title +
+                "/" + type +
+                "/" + name +
                 "/" + status +
                 "/" + description +
                 "/" + taskId +
