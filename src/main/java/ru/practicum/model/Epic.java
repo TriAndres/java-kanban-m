@@ -7,21 +7,21 @@ public class Epic extends Task {
     public Epic() {
     }
 
-    public Epic(Long id, TaskType taskType, String title, Status status, String description, Long idTask) {
+    public Epic(Long id, TaskType type, String name, Status status, String description, Long idTask) {
         this.id = id;
-        this.taskType = taskType;
-        this.title = title;
+        this.type = type;
+        this.name = name;
         this.status = status;
         this.description = description;
         this.taskId = idTask;
         if (this.id == null || this.id == 0) {
             this.id = getId();
         }
-        if (this.taskType == null) {
-            this.taskType = TaskType.EPIC;
+        if (this.type == null) {
+            this.type = TaskType.EPIC;
         }
-        if (this.title == null) {
-            this.title = "Эпик";
+        if (this.name == null) {
+            this.name = "Эпик";
         }
         if (this.status == null) {
             this.status = Status.NEW;
@@ -34,8 +34,8 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return id +
-                "/" + taskType +
-                "/" + title  +
+                "/" + type +
+                "/" + name +
                 "/" + status +
                 "/" + description +
                 "/" + taskId +
