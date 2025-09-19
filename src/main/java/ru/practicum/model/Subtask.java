@@ -3,19 +3,6 @@ package ru.practicum.model;
 public class Subtask extends Task {
 
     public Subtask() {
-        if (this.id == null || this.id == 0) {
-            this.id = getId();
-        }
-        if (getTaskType() == null) {
-            this.taskType = TaskType.SUBTASK;
-        }
-        if (getTitle() == null) {
-            this.title = "Подзадача";
-        }
-        if (getStatus() == null) {
-            this.status = Status.NEW;
-        }
-
     }
 
     public Subtask(Long id, TaskType taskType, String title, Status status, String description, Long idEpic) {

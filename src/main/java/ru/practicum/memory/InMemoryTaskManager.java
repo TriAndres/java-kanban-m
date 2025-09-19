@@ -229,7 +229,7 @@ public class InMemoryTaskManager implements TaskManage {
 
     @Override
     public List<Task> getHistory() {
-        return new ArrayList<>(historyManager.getHistoryMap());
+        return historyManager.getHistoryMap();
     }
 
     @Override

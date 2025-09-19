@@ -19,25 +19,38 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public void save() {
-        final String FIRST_LINE = "id,type,name,status,description,epic\n";
+
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
-            writer.write(FIRST_LINE);
+            final String LINE_0 = "id,type,name,status,description,epic\n";
+            writer.write(LINE_0);
             for (Task task : super.getTaskAll()) {
                 if (task != null) {
                     writer.write(Objects.requireNonNull(CSV.toString(task)));
+                    writer.newLine();
                 }
             }
+
             for (Epic epic : super.getEpicAll()) {
                 if (epic != null) {
                     writer.write(Objects.requireNonNull(CSV.toString(epic)));
+                    writer.newLine();
                 }
             }
+
             for (Subtask subtask : super.getSubtaskAll()) {
                 if (subtask != null) {
                     writer.write(Objects.requireNonNull(CSV.toString(subtask)));
+                    writer.newLine();
                 }
             }
-            writer.write(CSV.historyToString(super.getHistory()));
+            final String LINE_1 = "History\n";
+            writer.write(LINE_1);
+            for (Task task : super.getHistory()) {
+                System.out.println(task.toString());
+                writer.write(CSV.historyToString(task));
+            }
+
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при записи.");
         }
@@ -160,10 +173,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
+    @Override
+    public List<Task> getHistory() {
+        List<Task> list = super.getHistory();
+        save();
+        return list;
+    }
+
+    @Override
+    public List<Subtask> getListSubtaskIdEpic(Long id) {
+        List<Subtask> list = super.getListSubtaskIdEpic(id);
+        save();
+        return list;
+    }
+
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
         CSV csv = new CSV();
-        try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             while (reader.ready()) {
                 String line = reader.readLine();
                 Task task = csv.fromString(line);

@@ -13,18 +13,6 @@ public class Task {
     protected List<Long> subtaskIdList;
 
     public Task() {
-//        if (getId() == null || getId() == 0) {
-//            this.id = getId();
-//        }
-//        if (this.taskType == null) {
-//            this.taskType = TaskType.TASK;
-//        }
-//        if (this.title == null) {
-//            this.title = "Задача";
-//        }
-//        if (this.status == null) {
-//            this.status = Status.NEW;
-//        }
     }
 
     public Task(Long id, TaskType taskType, String title, Status status, String description) {
