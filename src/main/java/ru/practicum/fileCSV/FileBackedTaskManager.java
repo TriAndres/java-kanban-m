@@ -2,9 +2,7 @@ package ru.practicum.fileCSV;
 
 import ru.practicum.exception.ManagerSaveException;
 import ru.practicum.memory.InMemoryTaskManager;
-import ru.practicum.model.Epic;
-import ru.practicum.model.Subtask;
-import ru.practicum.model.Task;
+import ru.practicum.model.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -19,38 +17,40 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public void save() {
-
-
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
-            final String LINE_0 = "id,type,name,status,description,epic\n";
-            writer.write(LINE_0);
+            writer.write("id,type,name,status,description,taskId");
+            writer.newLine();
+            writer.write("TASK");
+            writer.newLine();
             for (Task task : super.getTaskAll()) {
                 if (task != null) {
                     writer.write(Objects.requireNonNull(CSV.toString(task)));
                     writer.newLine();
                 }
             }
-
+            writer.write("EPIC");
+            writer.newLine();
             for (Epic epic : super.getEpicAll()) {
                 if (epic != null) {
                     writer.write(Objects.requireNonNull(CSV.toString(epic)));
                     writer.newLine();
                 }
             }
-
+            writer.write("SUBTASK");
+            writer.newLine();
             for (Subtask subtask : super.getSubtaskAll()) {
                 if (subtask != null) {
                     writer.write(Objects.requireNonNull(CSV.toString(subtask)));
                     writer.newLine();
                 }
             }
-            final String LINE_1 = "History\n";
-            writer.write(LINE_1);
-            for (Task task : super.getHistory()) {
-                System.out.println(task.toString());
-                writer.write(CSV.historyToString(task));
-            }
-
+            writer.write("HISTORY");
+            writer.newLine();
+            // writer.write(LINE_1);
+//            for (Task task : super.getHistory()) {
+//                System.out.println(task.toString());
+//                //writer.write(CSV.historyToString(task));
+//            }
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при записи.");
         }
@@ -189,24 +189,60 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
-        CSV csv = new CSV();
         try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
-            while (reader.ready()) {
-                String line = reader.readLine();
-                Task task = csv.fromString(line);
-                if (task instanceof Epic epic) {
+            String scrin = "";
+            while ((scrin = reader.readLine()) != null) {
+                String[] line = scrin.split(",");
+
+                if (line[0].equals("id")) {
+                    break;
+                }
+
+                if (line[0].equals("TASK")) {
+                    String[]  line1 = scrin.split(",");
+                    Task task = new Task(
+                            Long.parseLong(line1[0]),
+                            TaskType.valueOf(line1[1]),
+                            line1[2],
+                            Status.valueOf(line1[3].toUpperCase()),
+                            line1[4],
+                            Long.parseLong(line1[5])
+                    );
+                    manager.updateTask(task);
+                    break;
+                }
+
+                if (line[0].equals("EPIC")) {
+                    String[]  line1 = scrin.split(",");
+                    Epic epic = new Epic(
+                            Long.parseLong(line1[0]),
+                            TaskType.valueOf(line1[1]),
+                            line1[2],
+                            Status.valueOf(line1[3].toUpperCase()),
+                            line1[4],
+                            Long.parseLong(line1[5])
+                    );
                     manager.updateEpic(epic);
+                    break;
                 }
-                if (task instanceof Subtask subtask) {
+
+                if (line[0].equals("SUBTASK")) {
+                    String[]  line1 = scrin.split(",");
+                    Subtask subtask = new Subtask(
+                            Long.parseLong(line1[0]),
+                            TaskType.valueOf(line1[1]),
+                            line1[2],
+                            Status.valueOf(line1[3].toUpperCase()),
+                            line1[4],
+                            Long.parseLong(line1[5])
+                    );
                     manager.updateSubtask(subtask);
+                    break;
                 }
-                if (task instanceof Task task1) {
-                    manager.createTask(task1);
+
+                if (line[0].equals("HISTORY")) {
+                    break;
                 }
-            }
-            String lineWithHistory = reader.readLine();
-            for (int id : Objects.requireNonNull(CSV.historyFromString(lineWithHistory))) {
-                manager.addHistory(id);
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при Чтении.");

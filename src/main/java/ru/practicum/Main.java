@@ -1,8 +1,6 @@
 package ru.practicum;
 
 import ru.practicum.fileCSV.FileBackedTaskManager;
-import ru.practicum.history.InMemoryHistoryManager;
-import ru.practicum.memory.TaskManage;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
@@ -11,12 +9,10 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import static ru.practicum.controller.Managers.detDefaultFile;
-import static ru.practicum.controller.Managers.getDefaultHistory;
 
 
 public class Main {
     FileBackedTaskManager manage = detDefaultFile();
-    InMemoryHistoryManager historyManager = getDefaultHistory();
 
     public static void main(String[] args) {
         new Main().game();
@@ -100,7 +96,8 @@ public class Main {
                 null,
                 null,
                 null,
-                description
+                description,
+                0L
         );
         task = manage.createTask(task);
 
@@ -252,14 +249,22 @@ public class Main {
     }
 
     private void showStatisticTaskAll() {
-//        System.out.println("getTaskAll()");
-//        for (Task task : taskManage.getTaskAll()) {
-//            System.out.println(task.toString());
-//        }
+        System.out.println("getTaskAll()");
+        for (Task task : manage.getTaskAll()) {
+            System.out.println(task.toString());
+            manage.save();
+        }
+        for (Epic epic : manage.getEpicAll()) {
+            System.out.println(epic);
+            for (Subtask subtask : manage.getListSubtaskIdEpic(epic.getId())) {
+                System.out.println("\t\t" + subtask);
+            }
+        }
+        manage.save();
 //        System.out.println("getEpicAll()");
-//        for (Epic epic : taskManage.getEpicAll()) {
+//        for (Epic epic : manage.getEpicAll()) {
 //            System.out.println(epic.toString());
-//            for (Subtask subtask : taskManage.getEpicById(epic.getId()).getSubtasks()) {
+//            for (Subtask subtask : manage.getListSubtaskIdEpic(epic.getId())) {
 //                System.out.println(subtask.toString());
 //            }
 //        }
@@ -273,7 +278,7 @@ public class Main {
 //            for (Subtask subtask : taskManage.getListSubtaskIdEpic(epic.getId())) {
 //                System.out.println(subtask.toString());
 //            }
-//        }
+////        }
     }
 
     private void deleteTaskAll() {
