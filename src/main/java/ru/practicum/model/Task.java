@@ -110,6 +110,7 @@ public class Task {
                 "/" + type +
                 "/" + name +
                 "/" + status +
+                "/" + description +
                 "/" + taskId +
                 "\n";
     }

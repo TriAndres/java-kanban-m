@@ -24,7 +24,7 @@ class InMemoryTaskManagerTest {
         final long epicId = 2L;
         final long subtaskId = 3L;
 
-        final Task task = new Task(taskId, TASK,"Test-Task", NEW,"Test-Task-description");
+        final Task task = new Task(taskId, TASK,"Test-Task", NEW,"Test-Task-description",0L);
         final Epic epic = new Epic(epicId, EPIC, "Test-Epic",  NEW, "Test-Epic-description", task.getId());
         final Subtask subtask = new Subtask(subtaskId, SUBTASK,"Test-Subtask", NEW ,"Test-Subtask-description", epic.getId());
 

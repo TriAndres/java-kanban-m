@@ -14,12 +14,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (Objects.nonNull(task)) {
             long id = task.getId();
             if (historyMap.containsKey(id)) {
-                removeHistory(id);
-            } else {
-                historyMap.put(id, linkLast(task));
+                 removeHistory(id);
             }
+            historyMap.put(id, linkLast(task));
         }
-
     }
 
     @Override

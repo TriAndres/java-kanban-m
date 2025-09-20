@@ -16,8 +16,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void addHistory1() {
-        Task task1 = new Task(1L, TASK,"Test-Task", NEW,"Test-Task-description");
-        Task task2 = new Task(2L, TASK,"Test-Task", NEW,"Test-Task-description");
+        Task task1 = new Task(1L, TASK,"Test-Task", NEW,"Test-Task-description", 0L);
+        Task task2 = new Task(2L, TASK,"Test-Task", NEW,"Test-Task-description", task1.getId());
 
         historyManager.addHistory(task1);
         historyManager.addHistory(task2);
@@ -32,9 +32,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void notRepeat() {
-        Task task1 = new Task(1L, TASK,"Test-Task", NEW,"Test-Task-description");
-        Task task2 = new Task(2L,  TASK,"Test-Task", NEW,"Test-Task-description");
-        Task task3 = new Task(3L, TASK,"Test-Task", NEW,"Test-Task-description");
+        Task task1 = new Task(1L, TASK,"Test-Task", NEW,"Test-Task-description",0L);
+        Task task2 = new Task(2L,  TASK,"Test-Task", NEW,"Test-Task-description",task1.getId());
+        Task task3 = new Task(3L, TASK,"Test-Task", NEW,"Test-Task-description",task2.getId());
 
         historyManager.addHistory(task1);
         historyManager.addHistory(task2);
@@ -51,9 +51,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void orderAdd() {
-        Task task1 = new Task(1L, TASK,"Test-Task", NEW,"Test-Task-description");
-        Task task2 = new Task(2L, TASK,"Test-Task", NEW,"Test-Task-description");
-        Task task3 = new Task(3L, TASK,"Test-Task", NEW,"Test-Task-description");
+        Task task1 = new Task(1L, TASK,"Test-Task", NEW,"Test-Task-description",0L);
+        Task task2 = new Task(2L, TASK,"Test-Task", NEW,"Test-Task-description", task1.getId());
+        Task task3 = new Task(3L, TASK,"Test-Task", NEW,"Test-Task-description",task2.getId());
 
         historyManager.addHistory(task1);
         historyManager.addHistory(task2);
