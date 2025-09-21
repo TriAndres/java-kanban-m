@@ -19,35 +19,35 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         CSV csv = new CSV();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
 
-            writer.write("TYPE,id,type,name,status,description,taskId\n");
-
+            writer.write("ID_TYPE,id,type,name,status,description,taskId\n");
+            int count = 0;
             for (Task task : super.getTaskAll()) {
                 if (task != null) {
-                    writer.write("TASK,");
+                    writer.write("ID_TASK,");
                     writer.write(csv.toString(task));
                 }
             }
 
             for (Epic epic : super.getEpicAll()) {
                 if (epic != null) {
-                    writer.write("EPIC,");
+                    writer.write("ID_EPIC,");
                     writer.write(csv.toString(epic));
                 }
             }
 
             for (Subtask subtask : super.getSubtaskAll()) {
                 if (subtask != null) {
-                    writer.write("SUBTASK,");
+                    writer.write("ID_SUBTASK,");
                     writer.write(csv.toString(subtask));
                 }
             }
-            writer.write("HISTORY,");
-            String line = "";
-            for (Task task : super.getHistory()) {
-                System.out.println(task.toString());
-                line += task.getId() + ",";
-                writer.write(line);
+            writer.write("ID_HISTORY,");
+            for (Task taskHistory : super.getHistory()) {
+                if (taskHistory != null) {
+                    writer.write(csv.historyToString(String.valueOf(taskHistory.getId())));
+                }
             }
+
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при записи.");
         }
@@ -96,9 +96,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateTask(Task task) {
-        super.updateTask(task);
+    public Task updateTask(Task task) {
+        Task task1 = super.updateTask(task);
         save();
+        return task1;
     }
 
     @Override
@@ -179,23 +180,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
+        CSV csv = new CSV();
         try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             while (reader.ready()) {
-                String line = reader.readLine();
-                Task task = CSV.fromString(line);
-                if (task instanceof Epic epic) {
-                    manager.updateEpic(epic);
-                }
-                if (task instanceof Subtask subtask) {
-                    manager.updateSubtask(subtask);
-                }
-                if (task instanceof Task task1) {
-                    manager.updateTask(task1);
-                }
+                csv.fromString(manager,reader.readLine());
             }
-            String line = reader.readLine();
-            for (long id : CSV.historyFromString(line)) {
-                manager.addHistory(id);
+            if (reader.ready()) {
+                for (long historyId : csv.historyFromString(reader.readLine())) {
+                    manager.addHistory(historyId);
+                }
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при Чтении.");

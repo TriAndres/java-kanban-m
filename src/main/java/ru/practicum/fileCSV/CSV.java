@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSV {
-    public String toString(Task task) {
+    public  String toString(Task task) {
         String[] line = task.toString().split("/");
         return String.join(",",
                 line[0],
@@ -18,60 +18,68 @@ public class CSV {
         );
     }
 
-    public static Task fromString(String script) {
+    public void fromString(FileBackedTaskManager manage, String script) {
         String[] line = script.split(",");
-
-        if (line[0].equals("TASK")) {
-            return new Task(
-                    Long.parseLong(line[1]),
-                    TaskType.valueOf(line[2]),
-                    line[3],
-                    Status.valueOf(line[4].toUpperCase()),
-                    line[5],
-                    Long.parseLong(line[6])
-            );
+        switch (line[0]) {
+            case "ID_TASK" -> {
+                manage.createTask(
+                        new Task(
+                                Long.parseLong(line[1]),
+                                TaskType.valueOf(line[2]),
+                                line[3],
+                                Status.valueOf(line[4].toUpperCase()),
+                                line[5],
+                                Long.parseLong(line[6])
+                        )
+                );
+                return;
+            }
+            case "ID_EPIC" -> {
+                manage.createEpic(
+                        new Epic(
+                                Long.parseLong(line[1]),
+                                TaskType.valueOf(line[2]),
+                                line[3],
+                                Status.valueOf(line[4].toUpperCase()),
+                                line[5],
+                                Long.parseLong(line[6])
+                        )
+                );
+                return;
+            }
+            case "ID_SUBTASK" -> {
+                manage.createSubtask(
+                        new Subtask(
+                                Long.parseLong(line[1]),
+                                TaskType.valueOf(line[2]),
+                                line[3],
+                                Status.valueOf(line[4].toUpperCase()),
+                                line[5],
+                                Long.parseLong(line[6])
+                        )
+                );
+                return;
+            }
         }
 
-        if (line[0].equals("EPIC")) {
-            return new Epic(
-                    Long.parseLong(line[1]),
-                    TaskType.valueOf(line[2]),
-                    line[3],
-                    Status.valueOf(line[4].toUpperCase()),
-                    line[5],
-                    Long.parseLong(line[6])
-            );
-
-        }
-
-        if (line[0].equals("SUBTASK")) {
-            return new Subtask(
-                    Long.parseLong(line[1]),
-                    TaskType.valueOf(line[2]),
-                    line[3],
-                    Status.valueOf(line[4].toUpperCase()),
-                    line[5],
-                    Long.parseLong(line[6])
-            );
-
-        }
-        return null;
     }
 
-    public static String historyToString(List<Task> history) {
-
-        return "new ArrayList<>()";
+    public  String historyToString(String script) {
+        String[] lines = script.split("/");
+        String line = "";
+        for (String taskId : lines) {
+            System.out.println(taskId);
+            line += taskId + ",";
+        }
+        return line;
     }
 
-    public static List<Long> historyFromString(String script) {
+    public  List<Long> historyFromString(String script) {
         List<Long> list = new ArrayList<>();
-        if (script != null) {
             String[] line1 = script.split(",");
             for (String taskId : line1) {
                 list.add(Long.parseLong(taskId));
             }
             return list;
-        }
-        return list;
     }
 }

@@ -14,31 +14,9 @@ public class Epic extends Task {
         this.status = status;
         this.description = description;
         this.taskId = idTask;
-        if (this.id == null || this.id == 0) {
-            this.id = getId();
-        }
-        if (this.type == null) {
-            this.type = TaskType.EPIC;
-        }
-        if (this.name == null) {
-            this.name = "Эпик";
-        }
-        if (this.status == null) {
-            this.status = Status.NEW;
-        }
-        if (this.subtaskIdList == null) {
-            this.subtaskIdList = new ArrayList<>();
-        }
-    }
-
-    @Override
-    public String toString() {
-        return id +
-                "/" + type +
-                "/" + name +
-                "/" + status +
-                "/" + description +
-                "/" + taskId +
-                "\n";
+        setType(TaskType.EPIC);
+        setName("Эпик");
+        setStatus(Status.NEW);
+        setSubtaskIdList(new ArrayList<>());
     }
 }

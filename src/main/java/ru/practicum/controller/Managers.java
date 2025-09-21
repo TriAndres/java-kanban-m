@@ -7,6 +7,7 @@ import ru.practicum.history.InMemoryHistoryManager;
 import ru.practicum.memory.InMemoryTaskManager;
 
 import java.io.File;
+import java.util.Scanner;
 
 import static ru.practicum.fileCSV.FileBackedTaskManager.loadFromFile;
 
@@ -23,4 +24,9 @@ public class Managers {
     public static FileBackedTaskManager detDefaultFile() {
         return loadFromFile(file);
     }
+
+    public static Scanner scanner(){
+        return new Scanner(System.in);
+    }
+
 }

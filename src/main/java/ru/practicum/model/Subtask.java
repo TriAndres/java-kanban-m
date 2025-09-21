@@ -12,28 +12,8 @@ public class Subtask extends Task {
         this.status = status;
         this.description = description;
         this.taskId = idEpic;
-        if (this.id == null || this.id == 0) {
-            this.id = getId();
-        }
-        if (this.type == null) {
-            this.type = TaskType.SUBTASK;
-        }
-        if (this.name == null) {
-            this.name = "Подзадача";
-        }
-        if (this.status == null) {
-            this.status = Status.NEW;
-        }
-    }
-
-    @Override
-    public String toString() {
-        return id +
-                "/" + type +
-                "/" + name +
-                "/" + status +
-                "/" + description +
-                "/" + taskId +
-                "\n";
+        setType(TaskType.SUBTASK);
+        setName("Подзадача");
+        setStatus(Status.NEW);
     }
 }
