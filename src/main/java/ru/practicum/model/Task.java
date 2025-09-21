@@ -22,18 +22,9 @@ public class Task {
         this.status = status;
         this.description = description;
         this.taskId = taskId;
-        if (this.id == null || this.id == 0) {
-            this.id = getId();
-        }
-        if (this.type == null) {
-            this.type = TaskType.TASK;
-        }
-        if (this.name == null) {
-            this.name = "Задача";
-        }
-        if (this.status == null) {
-            this.status = Status.NEW;
-        }
+        setType(TaskType.TASK);
+        setName("Задача");
+        setStatus(Status.NEW);
     }
 
     public Long getId() {
