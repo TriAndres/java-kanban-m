@@ -1,7 +1,6 @@
 package ru.practicum.memory;
 
 import ru.practicum.controller.Managers;
-import ru.practicum.exception.NullException;
 import ru.practicum.history.HistoryManager;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Status;
@@ -12,7 +11,7 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManage {
     private static long idCount;
-    private final  HashMap<Long, Task> taskMap = new HashMap<>();
+    private final HashMap<Long, Task> taskMap = new HashMap<>();
     private final HashMap<Long, Subtask> subtaskMap = new HashMap<>();
     private final HashMap<Long, Epic> epicMap = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
@@ -27,8 +26,6 @@ public class InMemoryTaskManager implements TaskManage {
                     .peek(t -> addHistory(t.getId()))
                     .toList();
         }
-        throw new NullException("getTaskAll() isEmpty()");
-
     }
 
     @Override
@@ -39,7 +36,6 @@ public class InMemoryTaskManager implements TaskManage {
                     .peek(e -> addHistory(e.getId()))
                     .toList();
         }
-        throw new NullException("getEpicAll() isEmpty().");
     }
 
     @Override
@@ -50,7 +46,6 @@ public class InMemoryTaskManager implements TaskManage {
                     .peek(s -> addHistory(s.getId()))
                     .toList();
         }
-        throw new NullException("getSubtaskAll() isEmpty().");
     }
 
     @Override
@@ -60,7 +55,6 @@ public class InMemoryTaskManager implements TaskManage {
             taskMap.put(task.getId(), task);
             return task;
         }
-        throw new NullException("createTask(Task task) null.");
     }
 
     @Override
@@ -71,7 +65,6 @@ public class InMemoryTaskManager implements TaskManage {
             statusEpic(epic);
             return epic;
         }
-        throw new NullException("ВcreateEpic(Epic epic) null.");
     }
 
     @Override
@@ -90,21 +83,18 @@ public class InMemoryTaskManager implements TaskManage {
             }
             return subtask;
         }
-        throw new NullException("createSubtask(Subtask subtask) null.");
     }
-/// ///////////
+
     @Override
-    public Task updateTask(Task task) {
+    public void updateTask(Task task) {
         if (task != null) {
             if (!taskMap.containsKey(task.getId())) {
                 Task oldTask = taskMap.get(task.getId());
                 taskMap.put(task.getId(), task);
                 removeHistory(oldTask.getId());
                 addHistory(task.getId());
-                return task;
             }
         }
-        throw new NullException("-> updateTask(Task task)");
     }
 
     @Override
@@ -116,8 +106,6 @@ public class InMemoryTaskManager implements TaskManage {
                 removeHistory(oldEpic.getId());
                 addHistory(epic.getId());
                 statusEpic(epic);
-            } else {
-                //System.out.println("task not id=" + epic.getId());
             }
         }
     }
@@ -137,8 +125,6 @@ public class InMemoryTaskManager implements TaskManage {
                 epicMap.put(epic.getId(), epic);
                 subtaskMap.put(subtask.getId(), subtask);
                 statusEpic(epic);
-            } else {
-                //System.out.println("task not id=" + subtask.getId());
             }
         }
     }
@@ -150,7 +136,6 @@ public class InMemoryTaskManager implements TaskManage {
             addHistory(task.getId());
             return task;
         }
-        throw new NullException("-> getTaskById(Long id)");
     }
 
     @Override
@@ -160,7 +145,6 @@ public class InMemoryTaskManager implements TaskManage {
             addHistory(epic.getId());
             return epic;
         }
-        throw new NullException("-> getEpicById(Long id)");
     }
 
     @Override
@@ -170,7 +154,6 @@ public class InMemoryTaskManager implements TaskManage {
             addHistory(subtask.getId());
             return subtask;
         }
-        throw new NullException("-> getSubtaskById(Long id)");
     }
 
     @Override
@@ -275,7 +258,6 @@ public class InMemoryTaskManager implements TaskManage {
             }
             return subtaskArrayList;
         }
-        //System.out.println("epic not id=" + id);
         return subtaskArrayList;
     }
 

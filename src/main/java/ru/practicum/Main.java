@@ -6,6 +6,8 @@ import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -91,6 +93,8 @@ public class Main {
                         null,
                         null,
                         description,
+                        Duration.ZERO,
+                        LocalDateTime.now().plusDays(1),
                         0L
                 )
         );
@@ -102,6 +106,8 @@ public class Main {
                         null,
                         null,
                         description,
+                        Duration.ZERO,
+                        LocalDateTime.now().plusDays(2),
                         task.getId()
                 )
         );
@@ -145,6 +151,8 @@ public class Main {
                                 null,
                                 null,
                                 description,
+                                Duration.ZERO,
+                                LocalDateTime.now().plusDays(3),
                                 epic.getId()
                         )
                 );
