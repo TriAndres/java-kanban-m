@@ -1,92 +1,81 @@
 package ru.practicum.memory;
 
 import ru.practicum.controller.Managers;
-import ru.practicum.exception.ElementNot;
 import ru.practicum.history.HistoryManager;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Status;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManage {
     private static long idCount;
-    private final  HashMap<Long, Task> taskMap = new HashMap<>();
+    private final HashMap<Long, Task> taskMap = new HashMap<>();
     private final HashMap<Long, Subtask> subtaskMap = new HashMap<>();
     private final HashMap<Long, Epic> epicMap = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
+    protected final Set<Task> prioritized = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+
     @Override
     public List<Task> getTaskAll() {
-        ArrayList<Task> list = new ArrayList<>();
         if (!taskMap.isEmpty()) {
-            for (Long key : taskMap.keySet()) {
-                Task task = taskMap.get(key);
-                list.add(task);
-                addHistory(task.getId());
-            }
+            return taskMap.values()
+                    .stream()
+                    .peek(t -> addHistory(t.getId()))
+                    .toList();
         }
-        return list;
+        return new ArrayList<>();
     }
 
     @Override
     public List<Epic> getEpicAll() {
-        ArrayList<Epic> list = new ArrayList<>();
         if (!epicMap.isEmpty()) {
-            for (Long key : epicMap.keySet()) {
-                Epic epic = epicMap.get(key);
-                list.add(epic);
-                addHistory(epic.getId());
-            }
+            return epicMap.values()
+                    .stream()
+                    .peek(e -> addHistory(e.getId()))
+                    .toList();
         }
-        return list;
+        return new ArrayList<>();
     }
 
     @Override
     public List<Subtask> getSubtaskAll() {
-        ArrayList<Subtask> list = new ArrayList<>();
         if (!subtaskMap.isEmpty()) {
-            for (Long key : subtaskMap.keySet()) {
-                Subtask subtask = subtaskMap.get(key);
-                list.add(subtask);
-                addHistory(subtask.getId());
-            }
+            return subtaskMap.values()
+                    .stream()
+                    .peek(s -> addHistory(s.getId()))
+                    .toList();
         }
-        return list;
+        return new ArrayList<>();
     }
 
     @Override
     public Task createTask(Task task) {
         if (task != null) {
-            Long id = getNextId();
-            task.setId(id);
+            task.setId(getNextId());
             taskMap.put(task.getId(), task);
             return task;
         }
-        throw new ElementNot("-> createTask(Task task)");
+        return new Task();
     }
 
     @Override
     public Epic createEpic(Epic epic) {
         if (epic != null) {
-            Long id = getNextId();
-            epic.setId(id);
+            epic.setId(getNextId());
             epicMap.put(epic.getId(), epic);
             statusEpic(epic);
             return epic;
         }
-        throw new ElementNot("-> createEpic(Epic epic)");
+        return new Epic();
     }
 
     @Override
     public Subtask createSubtask(Subtask subtask) {
         if (subtask != null) {
-            Long id = getNextId();
-            subtask.setId(id);
+            subtask.setId(getNextId());
             subtaskMap.put(subtask.getId(), subtask);
             Long idEpic = subtask.getTaskId();
             if (epicMap.containsKey(idEpic)) {
@@ -99,21 +88,19 @@ public class InMemoryTaskManager implements TaskManage {
             }
             return subtask;
         }
-        throw new ElementNot("-> createSubtask(Subtask subtask)");
+        return new Subtask();
     }
 
     @Override
-    public Task updateTask(Task task) {
+    public void updateTask(Task task) {
         if (task != null) {
             if (!taskMap.containsKey(task.getId())) {
                 Task oldTask = taskMap.get(task.getId());
                 taskMap.put(task.getId(), task);
                 removeHistory(oldTask.getId());
                 addHistory(task.getId());
-                return task;
             }
         }
-        throw new ElementNot("-> updateTask(Task task)");
     }
 
     @Override
@@ -125,8 +112,6 @@ public class InMemoryTaskManager implements TaskManage {
                 removeHistory(oldEpic.getId());
                 addHistory(epic.getId());
                 statusEpic(epic);
-            } else {
-                //System.out.println("task not id=" + epic.getId());
             }
         }
     }
@@ -146,8 +131,6 @@ public class InMemoryTaskManager implements TaskManage {
                 epicMap.put(epic.getId(), epic);
                 subtaskMap.put(subtask.getId(), subtask);
                 statusEpic(epic);
-            } else {
-                //System.out.println("task not id=" + subtask.getId());
             }
         }
     }
@@ -159,7 +142,7 @@ public class InMemoryTaskManager implements TaskManage {
             addHistory(task.getId());
             return task;
         }
-        throw new ElementNot("-> getTaskById(Long id)");
+        return new Task();
     }
 
     @Override
@@ -169,7 +152,7 @@ public class InMemoryTaskManager implements TaskManage {
             addHistory(epic.getId());
             return epic;
         }
-        throw new ElementNot("-> getEpicById(Long id)");
+        return new Epic();
     }
 
     @Override
@@ -179,7 +162,7 @@ public class InMemoryTaskManager implements TaskManage {
             addHistory(subtask.getId());
             return subtask;
         }
-        throw new ElementNot("-> getSubtaskById(Long id)");
+        return new Subtask();
     }
 
     @Override
@@ -284,7 +267,6 @@ public class InMemoryTaskManager implements TaskManage {
             }
             return subtaskArrayList;
         }
-        //System.out.println("epic not id=" + id);
         return subtaskArrayList;
     }
 

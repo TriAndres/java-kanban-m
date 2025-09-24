@@ -1,5 +1,8 @@
 package ru.practicum.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,21 +13,35 @@ public class Task {
     protected Status status;
     protected String description;
     protected Long taskId;
+    protected Duration duration;
+    protected LocalDateTime startTime;
     protected List<Long> subtaskIdList;
+    protected  final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public Task() {
     }
 
-    public Task(Long id, TaskType type, String name, Status status, String description, Long taskId) {
+    public Task(Long id, TaskType type, String name, Status status, String description, Duration duration, LocalDateTime startTime,  Long taskId) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.status = status;
         this.description = description;
+        this.duration = duration;
+        this.startTime = startTime;
         this.taskId = taskId;
-        setType(TaskType.TASK);
-        setName("Задача");
-        setStatus(Status.NEW);
+        if (this.id == null || this.id == 0) {
+            this.id = getId();
+        }
+        if (this.type == null) {
+            this.type = TaskType.TASK;
+        }
+        if (this.name == null) {
+            this.name = "Задача";
+        }
+        if (this.status == null) {
+            this.status = Status.NEW;
+        }
     }
 
     public Long getId() {
@@ -67,6 +84,22 @@ public class Task {
         this.description = description;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     public Long getTaskId() {
         return taskId;
     }
@@ -87,12 +120,12 @@ public class Task {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(id, task.id) && type == task.type && Objects.equals(name, task.name) && status == task.status && Objects.equals(description, task.description);
+        return Objects.equals(id, task.id) && type == task.type && Objects.equals(name, task.name) && status == task.status && Objects.equals(description, task.description) && Objects.equals(duration, task.duration) && Objects.equals(startTime, task.startTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, name, status, description);
+        return Objects.hash(id, type, name, status, description, duration, startTime);
     }
 
     @Override
@@ -102,6 +135,8 @@ public class Task {
                 "/" + name +
                 "/" + status +
                 "/" + description +
+                "/" + duration +
+                "/" + startTime.format(formatter) +
                 "/" + taskId +
                 "\n";
     }
