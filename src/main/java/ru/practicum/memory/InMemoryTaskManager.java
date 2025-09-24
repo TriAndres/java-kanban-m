@@ -1,16 +1,14 @@
 package ru.practicum.memory;
 
 import ru.practicum.controller.Managers;
+import ru.practicum.exception.NullException;
 import ru.practicum.history.HistoryManager;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Status;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManage {
     private static long idCount;
@@ -19,77 +17,80 @@ public class InMemoryTaskManager implements TaskManage {
     private final HashMap<Long, Epic> epicMap = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
+    protected final Set<Task> prioritized = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+
     @Override
     public List<Task> getTaskAll() {
-        ArrayList<Task> list = new ArrayList<>();
         if (!taskMap.isEmpty()) {
-            for (Long key : taskMap.keySet()) {
-                Task task = taskMap.get(key);
-                list.add(task);
-                addHistory(task.getId());
-            }
+            return taskMap.values()
+                    .stream()
+                    .peek(t -> addHistory(t.getId()))
+                    .toList();
         }
-        return list;
+        throw new NullException("getTaskAll() isEmpty()");
+
     }
 
     @Override
     public List<Epic> getEpicAll() {
-        ArrayList<Epic> list = new ArrayList<>();
         if (!epicMap.isEmpty()) {
-            for (Long key : epicMap.keySet()) {
-                Epic epic = epicMap.get(key);
-                list.add(epic);
-                addHistory(epic.getId());
-            }
+            return epicMap.values()
+                    .stream()
+                    .peek(e -> addHistory(e.getId()))
+                    .toList();
         }
-        return list;
+        throw new NullException("getEpicAll() isEmpty().");
     }
 
     @Override
     public List<Subtask> getSubtaskAll() {
-        ArrayList<Subtask> list = new ArrayList<>();
         if (!subtaskMap.isEmpty()) {
-            for (Long key : subtaskMap.keySet()) {
-                Subtask subtask = subtaskMap.get(key);
-                list.add(subtask);
-                addHistory(subtask.getId());
-            }
+            return subtaskMap.values()
+                    .stream()
+                    .peek(s -> addHistory(s.getId()))
+                    .toList();
         }
-        return list;
+        throw new NullException("getSubtaskAll() isEmpty().");
     }
 
     @Override
     public Task createTask(Task task) {
-        Long id = getNextId();
-        task.setId(id);
-        taskMap.put(id, task);
-        return task;
+        if (task != null) {
+            task.setId(getNextId());
+            taskMap.put(task.getId(), task);
+            return task;
+        }
+        throw new NullException("createTask(Task task) null.");
     }
 
     @Override
     public Epic createEpic(Epic epic) {
-        Long id = getNextId();
-        epic.setId(id);
-        epicMap.put(id, epic);
-        statusEpic(epic);
-        return epic;
+        if (epic != null) {
+            epic.setId(getNextId());
+            epicMap.put(epic.getId(), epic);
+            statusEpic(epic);
+            return epic;
+        }
+        throw new NullException("ВcreateEpic(Epic epic) null.");
     }
 
     @Override
     public Subtask createSubtask(Subtask subtask) {
-        Long id = getNextId();
-        subtask.setId(id);
-        subtaskMap.put(id, subtask);
-        Long idEpic = subtask.getTaskId();
-        if (epicMap.containsKey(idEpic)) {
-            Epic epic = epicMap.get(idEpic);
-            List<Long> list = epic.getSubtaskIdList();
-            list.add(subtask.getId());
-            epic.setSubtaskIdList(list);
-            epicMap.put(epic.getId(), epic);
-            statusEpic(epic);
+        if (subtask != null) {
+            subtask.setId(getNextId());
+            subtaskMap.put(subtask.getId(), subtask);
+            Long idEpic = subtask.getTaskId();
+            if (epicMap.containsKey(idEpic)) {
+                Epic epic = epicMap.get(idEpic);
+                List<Long> list = epic.getSubtaskIdList();
+                list.add(subtask.getId());
+                epic.setSubtaskIdList(list);
+                epicMap.put(epic.getId(), epic);
+                statusEpic(epic);
+            }
+            return subtask;
         }
-        return subtask;
+        throw new NullException("createSubtask(Subtask subtask) null.");
     }
 
     @Override

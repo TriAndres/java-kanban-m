@@ -1,16 +1,21 @@
 package ru.practicum.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
 
     public Subtask() {
     }
 
-    public Subtask(Long id, TaskType type, String name, Status status, String description, Long idEpic) {
+    public Subtask(Long id, TaskType type, String name, Status status, String description, Duration duration, LocalDateTime startTime, Long idEpic) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.status = status;
         this.description = description;
+        this.duration = duration;
+        this.startTime = startTime;
         this.taskId = idEpic;
         if (this.id == null || this.id == 0) {
             this.id = getId();
@@ -24,16 +29,5 @@ public class Subtask extends Task {
         if (this.status == null) {
             this.status = Status.NEW;
         }
-    }
-
-    @Override
-    public String toString() {
-        return id +
-                "/" + type +
-                "/" + name +
-                "/" + status +
-                "/" + description +
-                "/" + taskId +
-                "\n";
     }
 }
