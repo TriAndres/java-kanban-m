@@ -139,8 +139,6 @@ public class Task {
                 "/" + duration +
                 "/" + startTime.format(formatter) +
                 "/" + taskId +
-                "/" + duration.toMinutes() +
-                "/" + startTime.format(formatter) +
                 "\n";
     }
 }

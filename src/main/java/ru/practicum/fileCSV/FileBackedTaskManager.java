@@ -20,7 +20,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
 
             writer.write("ID_TYPE,id,type,name,status,description,taskId\n");
-            int count = 0;
+
             for (Task task : super.getTaskAll()) {
                 if (task != null) {
                     writer.write("ID_TASK,");
