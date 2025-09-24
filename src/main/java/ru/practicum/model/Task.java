@@ -21,12 +21,14 @@ public class Task {
     public Task() {
     }
 
-    public Task(Long id, TaskType type, String name, Status status, String description, Long taskId) {
+    public Task(Long id, TaskType type, String name, Status status, String description, Duration duration, LocalDateTime startTime,  Long taskId) {
         this.id = id;
         this.type = type;
         this.name = name;
         this.status = status;
         this.description = description;
+        this.duration = duration;
+        this.startTime = startTime;
         this.taskId = taskId;
         if (this.id == null || this.id == 0) {
             this.id = getId();

@@ -1,4 +1,4 @@
-TYPE,id,type,name,status,description,taskId
-TASK,1,TASK,Задача,NEW,frgrtgtr,0
-EPIC,2,EPIC,Эпик,NEW,frgrtgtr,1
-HISTORY,1,
+ID_TYPE,id,type,name,status,description,taskId
+ID_TASK,1,TASK,Задача,NEW,ukyuk,0
+ID_EPIC,2,EPIC,Эпик,NEW,ukyuk,5
+ID_HISTORY,1,2,

@@ -1,5 +1,6 @@
 package ru.practicum;
 
+import ru.practicum.controller.Managers;
 import ru.practicum.fileCSV.FileBackedTaskManager;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
@@ -14,8 +15,8 @@ import static ru.practicum.model.Status.NEW;
 
 
 public class Main {
-    private Scanner scanner = new Scanner(System.in);
-    private final FileBackedTaskManager manage = detDefaultFile();
+    private Scanner scanner = Managers.scanner();
+    private  FileBackedTaskManager manage = detDefaultFile();
 
     public static void main(String[] args) {
         new Main().game();
@@ -41,7 +42,7 @@ public class Main {
                 8 - удалить все задачи.
                 0 - выход из программы.
                 """);
-        return new Scanner(System.in).next();
+        return scanner.nextLine();
     }
 
     private void select(String line) {
@@ -91,16 +92,19 @@ public class Main {
                         null,
                         description,
                         0L
-                ));
+                )
+        );
 
-        Epic epic  = manage.createEpic(new Epic(
-                null,
-                null,
-                null,
-                null,
-                description,
-                task.getId()
-        ));
+        Epic epic = manage.createEpic(
+                new Epic(
+                        null,
+                        null,
+                        null,
+                        null,
+                        description,
+                        task.getId()
+                )
+        );
         System.out.println("Записано:\n" + task + epic);
     }
 
@@ -134,15 +138,16 @@ public class Main {
 
                 System.out.println("Введите название подзадачи:");
                 String description = scanner.next();
-                Subtask subtask = new Subtask(
-                        null,
-                        null,
-                        null,
-                        null,
-                        description,
-                        epic.getId()
+                Subtask subtask = manage.createSubtask(
+                        new Subtask(
+                                null,
+                                null,
+                                null,
+                                null,
+                                description,
+                                epic.getId()
+                        )
                 );
-                manage.createSubtask(subtask);
 
                 System.out.println("Записано в задаче:\n" + task);
                 System.out.println("Записано getListSubtaskIdEpic(epic.getId())");
@@ -245,17 +250,17 @@ public class Main {
     private void showStatisticTaskAll() {
         System.out.println("getTaskAll()");
         for (Task task : manage.getTaskAll()) {
-            System.out.println(task.toString());
+            System.out.print(task.toString());
         }
 
         System.out.println("getEpicAll()");
         for (Epic epic : manage.getEpicAll()) {
-            System.out.println(epic.toString());
+            System.out.print(epic.toString());
         }
 
         System.out.println("getSubtaskAll()");
         for (Subtask subtask : manage.getSubtaskAll()) {
-            System.out.println(subtask.toString());
+            System.out.print(subtask.toString());
         }
     }
 
