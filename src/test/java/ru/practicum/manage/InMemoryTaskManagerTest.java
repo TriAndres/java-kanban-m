@@ -82,9 +82,9 @@ class InMemoryTaskManagerTest {
         taskManage.deleteSubtaskById(subtaskId);
 
 
-        //assertNull(taskManage.getTaskById(taskId));
-        //assertNull(taskManage.getEpicById(epicId));
-        //assertNull(taskManage.getSubtaskById(subtaskId));
+//        assertNull(taskManage.getTaskById(taskId));
+//        assertNull(taskManage.getEpicById(epicId));
+//        assertNull(taskManage.getSubtaskById(subtaskId));
 
 
         assertEquals(new ArrayList<>(), taskManage.getTaskAll());
