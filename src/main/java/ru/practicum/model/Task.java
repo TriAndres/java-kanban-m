@@ -21,6 +21,7 @@ public class Task {
     public Task() {
     }
 
+
     public Task(Long id, TaskType type, String name, Status status, String description, Duration duration, LocalDateTime startTime,  Long taskId) {
         this.id = id;
         this.type = type;
@@ -138,6 +139,8 @@ public class Task {
                 "/" + duration +
                 "/" + startTime.format(formatter) +
                 "/" + taskId +
+                "/" + duration.toMinutes() +
+                "/" + startTime.format(formatter) +
                 "\n";
     }
 }

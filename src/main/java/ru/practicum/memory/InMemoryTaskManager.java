@@ -26,7 +26,6 @@ public class InMemoryTaskManager implements TaskManage {
                     .peek(t -> addHistory(t.getId()))
                     .toList();
         }
-        return new ArrayList<>();
     }
 
     @Override
@@ -37,7 +36,6 @@ public class InMemoryTaskManager implements TaskManage {
                     .peek(e -> addHistory(e.getId()))
                     .toList();
         }
-        return new ArrayList<>();
     }
 
     @Override
@@ -48,7 +46,6 @@ public class InMemoryTaskManager implements TaskManage {
                     .peek(s -> addHistory(s.getId()))
                     .toList();
         }
-        return new ArrayList<>();
     }
 
     @Override
@@ -58,7 +55,6 @@ public class InMemoryTaskManager implements TaskManage {
             taskMap.put(task.getId(), task);
             return task;
         }
-        return new Task();
     }
 
     @Override
@@ -69,7 +65,6 @@ public class InMemoryTaskManager implements TaskManage {
             statusEpic(epic);
             return epic;
         }
-        return new Epic();
     }
 
     @Override
@@ -88,7 +83,6 @@ public class InMemoryTaskManager implements TaskManage {
             }
             return subtask;
         }
-        return new Subtask();
     }
 
     @Override
@@ -142,7 +136,6 @@ public class InMemoryTaskManager implements TaskManage {
             addHistory(task.getId());
             return task;
         }
-        return new Task();
     }
 
     @Override
@@ -152,7 +145,6 @@ public class InMemoryTaskManager implements TaskManage {
             addHistory(epic.getId());
             return epic;
         }
-        return new Epic();
     }
 
     @Override
@@ -162,7 +154,6 @@ public class InMemoryTaskManager implements TaskManage {
             addHistory(subtask.getId());
             return subtask;
         }
-        return new Subtask();
     }
 
     @Override
