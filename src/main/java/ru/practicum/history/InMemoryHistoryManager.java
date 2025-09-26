@@ -39,7 +39,7 @@ public class InMemoryHistoryManager implements HistoryManager {
                 history.add(saved.element);
             }
         }
-        return new ArrayList<>(history);
+        return history;
     }
 
     private Node<Task> linkLast(Task task) {

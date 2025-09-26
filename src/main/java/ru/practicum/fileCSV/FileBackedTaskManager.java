@@ -2,7 +2,9 @@ package ru.practicum.fileCSV;
 
 import ru.practicum.exception.ManagerSaveException;
 import ru.practicum.memory.InMemoryTaskManager;
-import ru.practicum.model.*;
+import ru.practicum.model.Epic;
+import ru.practicum.model.Subtask;
+import ru.practicum.model.Task;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -21,29 +23,30 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             writer.write("ID_TYPE,id,type,name,status,description,taskId\n");
 
-            for (Task task : super.getTaskAll()) {
-                if (task != null) {
+            if (super.getTaskAll() != null) {
+                for (Task task : super.getTaskAll()) {
                     writer.write("ID_TASK,");
                     writer.write(csv.toString(task));
                 }
             }
 
-            for (Epic epic : super.getEpicAll()) {
-                if (epic != null) {
+            if (super.getEpicAll() != null) {
+                for (Epic epic : super.getEpicAll()) {
                     writer.write("ID_EPIC,");
                     writer.write(csv.toString(epic));
                 }
             }
 
-            for (Subtask subtask : super.getSubtaskAll()) {
-                if (subtask != null) {
+            if (super.getSubtaskAll() != null) {
+                for (Subtask subtask : super.getSubtaskAll()) {
                     writer.write("ID_SUBTASK,");
                     writer.write(csv.toString(subtask));
                 }
             }
+
             writer.write("ID_HISTORY,");
-            for (Task taskHistory : super.getHistory()) {
-                if (taskHistory != null) {
+            if (super.getHistory() != null) {
+                for (Task taskHistory : super.getHistory()) {
                     writer.write(csv.historyToString(String.valueOf(taskHistory.getId())));
                 }
             }
@@ -182,7 +185,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         CSV csv = new CSV();
         try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             while (reader.ready()) {
-                csv.fromString(manager,reader.readLine());
+                csv.fromString(manager, reader.readLine());
             }
             if (reader.ready()) {
                 for (long historyId : csv.historyFromString(reader.readLine())) {
