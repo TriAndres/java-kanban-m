@@ -30,6 +30,9 @@ public class Epic extends Task {
         if (this.status == null) {
             this.status = Status.NEW;
         }
+        if (this.duration == null) {
+            this.duration = Duration.ZERO;
+        }
         if (this.subtaskIdList == null) {
             this.subtaskIdList = new ArrayList<>();
         }
