@@ -17,8 +17,8 @@ import static ru.practicum.model.Status.NEW;
 
 
 public class Main {
-    private Scanner scanner = Managers.scanner();
-    private  FileBackedTaskManager manage = detDefaultFile();
+    private final Scanner scanner = Managers.scanner();
+    private final FileBackedTaskManager manage = detDefaultFile();
 
     public static void main(String[] args) {
         new Main().game();
@@ -115,24 +115,26 @@ public class Main {
     }
 
     private void addSubtask() {
-        if (!manage.getEpicAll().isEmpty()) {
-            manage.save();
+        if (manage.getEpicAll() != null) {
+            //manage.save();
             System.out.println("Введите id задачи:");
             long id = 0;
             while (true) {
                 if (scanner.hasNextLong()) {
                     id = scanner.nextLong();
-                    if (manage.getTaskAll().contains(manage.getTaskById(id))) {
-                        break;
-                    } else if (id == -1L) {
-                        System.out.println("-1 выход из меню");
-                        break;
+                    if (manage.getTaskAll() != null) {
+                        if (manage.getTaskAll().contains(manage.getTaskById(id))) {
+                            break;
+                        } else if (id == -1L) {
+                            System.out.println("-1 выход из меню");
+                            break;
+                        }
                     }
                 } else {
                     scanner.nextLine();
                 }
             }
-            if (manage.getTaskAll().contains(manage.getTaskById(id))) {
+            if (manage.getTaskAll() != null && manage.getTaskAll().contains(manage.getTaskById(id))) {
                 Task task = manage.getTaskById(id);
 
                 Epic epic = manage
@@ -159,9 +161,7 @@ public class Main {
 
                 System.out.println("Записано в задаче:\n" + task);
                 System.out.println("Записано getListSubtaskIdEpic(epic.getId())");
-                for (Subtask subtask1 : manage.getListSubtaskIdEpic(epic.getId())) {
-                    System.out.println(subtask1);
-                }
+                manage.getListSubtaskIdEpic(epic.getId()).forEach(s -> System.out.println(s.toString()));
             }
         } else {
             System.out.println("Список пуст, добавьте задачу.\n");
@@ -169,7 +169,7 @@ public class Main {
     }
 
     private void addStatusSubtask() {
-        if (!manage.getSubtaskAll().isEmpty()) {
+        if (manage.getSubtaskAll() != null) {
             System.out.println("Введите id подзадачи:");
             long id = 0L;
             while (true) {
@@ -220,7 +220,7 @@ public class Main {
     }
 
     private void showStatisticTaskId() {
-        if (!manage.getTaskAll().isEmpty()) {
+        if (manage.getTaskAll() != null) {
             System.out.println("Введите id задачи:");
             long id = 0L;
             while (true) {
@@ -246,9 +246,7 @@ public class Main {
                         .filter(i -> Objects.equals(i.getTaskId(), task.getId()))
                         .toList()
                         .getFirst();
-                for (Subtask subtask : manage.getListSubtaskIdEpic(epic.getId())) {
-                    System.out.println(subtask.toString());
-                }
+                manage.getListSubtaskIdEpic(epic.getId()).forEach(s -> System.out.println(s.toString()));
             }
         } else {
             System.out.println("Список пуст, добавьте задачу.");
@@ -256,27 +254,25 @@ public class Main {
     }
 
     private void showStatisticTaskAll() {
-        System.out.println("getTaskAll()");
-        for (Task task : manage.getTaskAll()) {
-            System.out.print(task.toString());
+        if (manage.getTaskAll() != null) {
+            System.out.println("getTaskAll()");
+            manage.getTaskAll().forEach(t -> System.out.println(t.toString()));
         }
 
-        System.out.println("getEpicAll()");
-        for (Epic epic : manage.getEpicAll()) {
-            System.out.print(epic.toString());
+        if (manage.getEpicAll() != null) {
+            System.out.println("getEpicAll()");
+            manage.getEpicAll().forEach(e -> System.out.println(e.toString()));
         }
 
-        System.out.println("getSubtaskAll()");
-        for (Subtask subtask : manage.getSubtaskAll()) {
-            System.out.print(subtask.toString());
+        if (manage.getSubtaskAll() != null) {
+            System.out.println("getSubtaskAll()");
+            manage.getSubtaskAll().forEach(s -> System.out.println(s.toString()));
         }
     }
 
     private void showTaskHistory() {
-        if (!manage.getHistory().isEmpty()) {
-            for (Task task : manage.getHistory()) {
-                System.out.println(task.toString());
-            }
+        if (manage.getHistory() != null) {
+            manage.getHistory().forEach(h -> System.out.println(h.toString()));
             System.out.println("getHistory()\n");
         } else {
             System.out.println("Список пуст, добавьте задачу.\n");
@@ -284,7 +280,7 @@ public class Main {
     }
 
     private void deleteTaskById() {
-        if (!manage.getTaskAll().isEmpty()) {
+        if (manage.getTaskAll() != null) {
             System.out.println("Введите id задачи:");
             long id = 0L;
             while (true) {
@@ -308,9 +304,8 @@ public class Main {
                         .filter(i -> Objects.equals(i.getTaskId(), task.getId()))
                         .toList()
                         .getFirst();
-
-                for (Subtask subtask : manage.getListSubtaskIdEpic(epic.getId())) {
-                    manage.deleteSubtaskById(subtask.getId());
+                if (manage.getListSubtaskIdEpic(epic.getId()) != null) {
+                    manage.getListSubtaskIdEpic(epic.getId()).forEach(s -> System.out.println(s.toString()));
                 }
                 manage.deleteEpicById(epic.getId());
                 manage.deleteTaskById(id);
