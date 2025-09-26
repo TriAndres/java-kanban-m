@@ -29,5 +29,8 @@ public class Subtask extends Task {
         if (this.status == null) {
             this.status = Status.NEW;
         }
+        if (this.duration == null) {
+            this.duration = Duration.ZERO;
+        }
     }
 }

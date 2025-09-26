@@ -7,6 +7,8 @@ import ru.practicum.model.Status;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -280,6 +282,7 @@ public class InMemoryTaskManager implements TaskManage {
     @Override
     public void statusEpic(Epic epic) {
         if (epicMap.containsKey(epic.getId())) {
+            setEpicDuration(epic);
             List<Subtask> list = getListSubtaskIdEpic(epic.getId());
             int countStatusNew = 0;
             int countStatusDone = 0;
@@ -324,6 +327,35 @@ public class InMemoryTaskManager implements TaskManage {
                 }
             }
         }
+    }
+
+    public void setEpicDuration(Epic epic) {
+        List<Long> subtaskList = epic.getSubtaskIdList();
+        Duration epicDuration = Duration.ZERO;
+        LocalDateTime startTime = LocalDateTime.MAX;
+        LocalDateTime endTime = LocalDateTime.MIN;
+        if (!subtaskList.isEmpty()) {
+            for (Long taskId : subtaskList) {
+                Subtask subtask = subtaskMap.get(taskId);
+                if (subtask.getStartTime().isBefore(startTime)) {
+                    startTime = subtask.getStartTime();
+                }
+                if (subtask.getEndTime().isAfter(endTime)) {
+                    endTime = subtask.getEndTime();
+                }
+            }
+            epicDuration = Duration.between(startTime, endTime);
+            epic.setStartTime(startTime);
+            epic.setEndTime(endTime);
+        } else {
+            epic.setStartTime(LocalDateTime.MAX.minusSeconds(59).minusNanos(999999999));
+            epic.setEndTime(LocalDateTime.MAX.minusSeconds(59).minusNanos(999999999));
+        }
+        epic.setDuration(epicDuration);
+    }
+
+    public void validate(Task task) {
+
     }
 
     public void prioritizedRemove(Task task) {

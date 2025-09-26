@@ -16,6 +16,7 @@ public class Task {
     protected Long taskId;
     protected Duration duration;
     protected LocalDateTime startTime;
+    protected LocalDateTime endTime;
     protected List<Long> subtaskIdList;
     protected  final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
@@ -43,6 +44,9 @@ public class Task {
         }
         if (this.status == null) {
             this.status = Status.NEW;
+        }
+        if (this.duration == null) {
+            this.duration = Duration.ZERO;
         }
     }
 
@@ -100,6 +104,14 @@ public class Task {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public Long getTaskId() {
