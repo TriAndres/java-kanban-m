@@ -2,6 +2,7 @@ package ru.practicum.fileCSV;
 
 import ru.practicum.exception.ManagerSaveException;
 import ru.practicum.memory.InMemoryTaskManager;
+import ru.practicum.memory.TaskManage;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
@@ -10,10 +11,14 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class FileBackedTaskManager extends InMemoryTaskManager {
-    public final File file;
+import static ru.practicum.controller.Managers.getDefault;
+
+public class FileBackedTaskManager implements TaskManage {
+    private final InMemoryTaskManager inMemory;
+    private final File file;
 
     public FileBackedTaskManager(File file) {
+        this.inMemory = (InMemoryTaskManager) getDefault();
         this.file = file;
     }
 
@@ -21,33 +26,33 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         CSV csv = new CSV();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
 
-            writer.write("ID_TYPE,id,type,name,status,description,taskId\n");
+            writer.write("ID_TYPE,id,type,name,status,description,duration,startTime,taskId\n");
 
-            if (super.getTaskAll() != null) {
-                for (Task task : super.getTaskAll()) {
+            if (inMemory.getTaskAll() != null) {
+                for (Task task : inMemory.getTaskAll()) {
                     writer.write("ID_TASK,");
                     writer.write(csv.toString(task));
                 }
             }
 
-            if (super.getEpicAll() != null) {
-                for (Epic epic : super.getEpicAll()) {
+            if (inMemory.getEpicAll() != null) {
+                for (Epic epic : inMemory.getEpicAll()) {
                     writer.write("ID_EPIC,");
                     writer.write(csv.toString(epic));
                 }
             }
 
-            if (super.getSubtaskAll() != null) {
-                for (Subtask subtask : super.getSubtaskAll()) {
+            if (inMemory.getSubtaskAll() != null) {
+                for (Subtask subtask : inMemory.getSubtaskAll()) {
                     writer.write("ID_SUBTASK,");
                     writer.write(csv.toString(subtask));
                 }
             }
 
             writer.write("ID_HISTORY,");
-            if (super.getHistory() != null) {
-                for (Task taskHistory : super.getHistory()) {
-                    writer.write(csv.historyToString(String.valueOf(taskHistory.getId())));
+            if (inMemory.getHistory() != null) {
+                for (Task task : inMemory.getHistory()) {
+                    writer.write(csv.historyToString(task));
                 }
             }
 
@@ -58,126 +63,133 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public List<Task> getTaskAll() {
-        List<Task> list = super.getTaskAll();
+        List<Task> list = inMemory.getTaskAll();
         save();
         return list;
     }
 
     @Override
     public List<Epic> getEpicAll() {
-        List<Epic> list = super.getEpicAll();
+        List<Epic> list = inMemory.getEpicAll();
         save();
         return list;
     }
 
     @Override
     public List<Subtask> getSubtaskAll() {
-        List<Subtask> list = super.getSubtaskAll();
+        List<Subtask> list = inMemory.getSubtaskAll();
         save();
         return list;
     }
 
     @Override
     public Task createTask(Task task) {
-        Task task1 = super.createTask(task);
+        Task task1 = inMemory.createTask(task);
         save();
         return task1;
     }
 
     @Override
     public Epic createEpic(Epic epic) {
-        Epic epic1 = super.createEpic(epic);
+        Epic epic1 = inMemory.createEpic(epic);
         save();
         return epic1;
     }
 
     @Override
     public Subtask createSubtask(Subtask subtask) {
-        Subtask subtask1 = super.createSubtask(subtask);
+        Subtask subtask1 = inMemory.createSubtask(subtask);
         save();
         return subtask1;
     }
 
     @Override
     public void updateTask(Task task) {
-        super.updateTask(task);
+        inMemory.updateTask(task);
         save();
     }
 
     @Override
     public void updateEpic(Epic epic) {
-        super.updateEpic(epic);
+        inMemory.updateEpic(epic);
         save();
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
-        super.updateSubtask(subtask);
+        inMemory.updateSubtask(subtask);
         save();
     }
 
     @Override
     public Task getTaskById(Long id) {
-        Task task = super.getTaskById(id);
+        Task task = inMemory.getTaskById(id);
         save();
         return task;
     }
 
     @Override
     public Epic getEpicById(Long id) {
-        Epic epic = super.getEpicById(id);
+        Epic epic = inMemory.getEpicById(id);
         save();
         return epic;
     }
 
     @Override
     public Subtask getSubtaskById(Long id) {
-        Subtask subtask = super.getSubtaskById(id);
+        Subtask subtask = inMemory.getSubtaskById(id);
         save();
         return subtask;
     }
 
     @Override
     public void deleteTaskById(Long id) {
-        super.deleteTaskById(id);
+        inMemory.deleteTaskById(id);
         save();
     }
 
     @Override
     public void deleteEpicById(Long id) {
-        super.deleteEpicById(id);
+        inMemory.deleteEpicById(id);
         save();
     }
 
     @Override
     public void deleteSubtaskById(Long id) {
-        super.deleteSubtaskById(id);
+        inMemory.deleteSubtaskById(id);
         save();
     }
 
     @Override
     public void deleteTaskAll() {
-        super.deleteTaskAll();
+        inMemory.deleteTaskAll();
         save();
     }
 
     @Override
     public void deleteEpicAll() {
-        super.deleteEpicAll();
+        inMemory.deleteEpicAll();
         save();
     }
 
     @Override
     public void deleteSubtaskAll() {
-        super.deleteSubtaskAll();
+        inMemory.deleteSubtaskAll();
         save();
     }
 
     @Override
     public List<Subtask> getListSubtaskIdEpic(Long id) {
-        List<Subtask> list = super.getListSubtaskIdEpic(id);
+        List<Subtask> list = inMemory.getListSubtaskIdEpic(id);
         save();
         return list;
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        List<Task> tasks = inMemory.getHistory();
+        save();
+        return tasks;
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
