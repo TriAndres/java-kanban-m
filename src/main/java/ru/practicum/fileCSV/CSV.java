@@ -1,5 +1,7 @@
 package ru.practicum.fileCSV;
 
+import ru.practicum.history.HistoryManager;
+import ru.practicum.memory.InMemoryTaskManager;
 import ru.practicum.model.*;
 
 import java.time.Duration;
@@ -10,7 +12,8 @@ import java.util.List;
 
 public class CSV {
     protected static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-    public  String toString(Task task) {
+
+    public String toString(Task task) {
         String[] line = task.toString().split("/");
         return String.join(",",
                 line[0],
@@ -70,17 +73,21 @@ public class CSV {
         }
     }
 
-    public  String historyToString(String script) {
-        String[] lines = script.split("/");
-        String line = "";
-        for (String taskId : lines) {
-            System.out.println(taskId);
-            line += taskId + ",";
-        }
-        return line;
+//    public String historyToString(String script) {
+//        String[] lines = script.split("/");
+//        String line = "";
+//        for (String taskId : lines) {
+//            System.out.println(taskId);
+//            line += taskId + ",";
+//        }
+//        return line;
+//    }
+
+    public String historyToString(Task task) {
+        return String.join(",",String.valueOf(task.getId()) + ",");
     }
 
-    public  List<Long> historyFromString(String script) {
+    public List<Long> historyFromString(String script) {
         List<Long> list = new ArrayList<>();
         String[] line1 = script.split(",");
         for (String taskId : line1) {

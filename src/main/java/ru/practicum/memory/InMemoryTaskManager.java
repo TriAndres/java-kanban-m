@@ -1,6 +1,7 @@
 package ru.practicum.memory;
 
 import ru.practicum.controller.Managers;
+import ru.practicum.exception.ManagerValidateException;
 import ru.practicum.history.HistoryManager;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Status;
@@ -355,7 +356,18 @@ public class InMemoryTaskManager implements TaskManage {
     }
 
     public void validate(Task task) {
-
+        List<Task> tasks = new ArrayList<>(getPrioritizedTasks());
+        if (!tasks.isEmpty()) {
+            for (Task listTask : tasks) {
+                if (task.getStartTime().isBefore(listTask.getStartTime())
+                && task.getEndTime().isBefore(listTask.getEndTime())
+                || task.getStartTime().isAfter(listTask.getStartTime())
+                        && task.getEndTime().isAfter(listTask.getEndTime())) {
+                } else {
+                    throw new ManagerValidateException("Ошибка валидации");
+                }
+            }
+        }
     }
 
     public void prioritizedRemove(Task task) {

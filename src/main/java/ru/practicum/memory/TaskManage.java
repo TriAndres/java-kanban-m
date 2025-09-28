@@ -27,7 +27,16 @@ public interface TaskManage {
     void deleteSubtaskAll();
     List<Subtask> getListSubtaskIdEpic(Long id);
     List<Task> getHistory();
-    void addHistory(long id);
-    void removeHistory(long id);
-    void statusEpic(Epic epic);
+
+    default void addHistory(long id) {
+
+    }
+
+    default void removeHistory(long id) {
+
+    }
+
+    default void statusEpic(Epic epic) {
+
+    }
 }

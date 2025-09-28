@@ -13,10 +13,10 @@ public class Task {
     protected String name;
     protected Status status;
     protected String description;
-    protected Long taskId;
     protected Duration duration;
     protected LocalDateTime startTime;
     protected LocalDateTime endTime;
+    protected Long taskId;
     protected List<Long> subtaskIdList;
     protected  final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
