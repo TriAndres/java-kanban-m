@@ -39,4 +39,5 @@ public interface TaskManage {
     default void statusEpic(Epic epic) {
 
     }
+    List<Task> getPrioritizedTaskList();
 }

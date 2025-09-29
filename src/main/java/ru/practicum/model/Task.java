@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public class Task {
     protected Long id;
@@ -18,13 +17,20 @@ public class Task {
     protected LocalDateTime endTime;
     protected Long taskId;
     protected List<Long> subtaskIdList;
-    protected  final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    protected final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public Task() {
+        this.id = getId();
+        this.type = TaskType.TASK;
+        this.name = "Задача";
+        this.status = Status.NEW;
+        this.duration = Duration.ZERO;
+        this.startTime = LocalDateTime.now();
+        this.endTime = LocalDateTime.now();
     }
 
 
-    public Task(Long id, TaskType type, String name, Status status, String description, Duration duration, LocalDateTime startTime,  Long taskId) {
+    public Task(Long id, TaskType type, String name, Status status, String description, Duration duration, LocalDateTime startTime, LocalDateTime endTime, Long taskId) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -32,6 +38,7 @@ public class Task {
         this.description = description;
         this.duration = duration;
         this.startTime = startTime;
+        this.endTime = endTime;
         this.taskId = taskId;
         if (this.id == null || this.id == 0) {
             this.id = getId();
@@ -47,6 +54,12 @@ public class Task {
         }
         if (this.duration == null) {
             this.duration = Duration.ZERO;
+        }
+        if (this.startTime == null) {
+            this.startTime = LocalDateTime.now();
+        }
+        if (this.endTime == null) {
+            this.endTime = LocalDateTime.now();
         }
     }
 
@@ -111,7 +124,7 @@ public class Task {
     }
 
     public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
+        this.endTime = startTime;
     }
 
     public Long getTaskId() {
@@ -150,7 +163,8 @@ public class Task {
                 "/" + status +
                 "/" + description +
                 "/" + duration +
-                "/" + startTime.format(formatter) +
+                "/" + startTime +
+                "/" + endTime +
                 "/" + taskId +
                 "\n";
     }

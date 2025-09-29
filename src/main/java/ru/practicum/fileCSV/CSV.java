@@ -1,7 +1,5 @@
 package ru.practicum.fileCSV;
 
-import ru.practicum.history.HistoryManager;
-import ru.practicum.memory.InMemoryTaskManager;
 import ru.practicum.model.*;
 
 import java.time.Duration;
@@ -23,7 +21,8 @@ public class CSV {
                 line[4],
                 line[5],
                 line[6],
-                line[7]
+                line[7],
+                line[8]
         );
     }
 
@@ -38,8 +37,9 @@ public class CSV {
                             Status.valueOf(line[4].toUpperCase()),
                             line[5],
                             Duration.parse(line[6]),
-                            LocalDateTime.parse(line[7], formatter),
-                            Long.parseLong(line[8])
+                            LocalDateTime.parse(line[7]),
+                            LocalDateTime.parse(line[8]),
+                            Long.parseLong(line[9])
                     )
             );
         }
@@ -52,8 +52,9 @@ public class CSV {
                             Status.valueOf(line[4].toUpperCase()),
                             line[5],
                             Duration.parse(line[6]),
-                            LocalDateTime.parse(line[7], formatter),
-                            Long.parseLong(line[8])
+                            LocalDateTime.parse(line[7]),
+                            LocalDateTime.parse(line[8]),
+                            Long.parseLong(line[9])
                     )
             );
         }
@@ -66,22 +67,13 @@ public class CSV {
                             Status.valueOf(line[4].toUpperCase()),
                             line[5],
                             Duration.parse(line[6]),
-                            LocalDateTime.parse(line[7], formatter),
-                            Long.parseLong(line[8])
+                            LocalDateTime.parse(line[7]),
+                            LocalDateTime.parse(line[8]),
+                            Long.parseLong(line[9])
                     )
             );
         }
     }
-
-//    public String historyToString(String script) {
-//        String[] lines = script.split("/");
-//        String line = "";
-//        for (String taskId : lines) {
-//            System.out.println(taskId);
-//            line += taskId + ",";
-//        }
-//        return line;
-//    }
 
     public String historyToString(Task task) {
         return String.join(",",String.valueOf(task.getId()) + ",");

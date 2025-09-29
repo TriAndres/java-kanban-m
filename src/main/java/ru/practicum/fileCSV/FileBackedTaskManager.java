@@ -1,7 +1,6 @@
 package ru.practicum.fileCSV;
 
 import ru.practicum.exception.ManagerSaveException;
-import ru.practicum.memory.InMemoryTaskManager;
 import ru.practicum.memory.TaskManage;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
@@ -14,11 +13,11 @@ import java.util.List;
 import static ru.practicum.controller.Managers.getDefault;
 
 public class FileBackedTaskManager implements TaskManage {
-    private final InMemoryTaskManager inMemory;
+    private final TaskManage inMemory;
     private final File file;
 
     public FileBackedTaskManager(File file) {
-        this.inMemory = (InMemoryTaskManager) getDefault();
+        this.inMemory = getDefault();
         this.file = file;
     }
 
@@ -26,7 +25,7 @@ public class FileBackedTaskManager implements TaskManage {
         CSV csv = new CSV();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
 
-            writer.write("ID_TYPE,id,type,name,status,description,duration,startTime,taskId\n");
+            writer.write("ID_TYPE,id,type,name,status,description,duration,startTime,endTime,taskId\n");
 
             if (inMemory.getTaskAll() != null) {
                 for (Task task : inMemory.getTaskAll()) {
@@ -190,6 +189,13 @@ public class FileBackedTaskManager implements TaskManage {
         List<Task> tasks = inMemory.getHistory();
         save();
         return tasks;
+    }
+
+    @Override
+    public List<Task> getPrioritizedTaskList() {
+        List<Task> tasks = inMemory.getPrioritizedTaskList();
+        save();
+        return  tasks;
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
