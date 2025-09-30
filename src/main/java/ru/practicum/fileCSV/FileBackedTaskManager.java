@@ -27,22 +27,22 @@ public class FileBackedTaskManager implements TaskManage {
 
             writer.write("ID_TYPE,id,type,name,status,description,duration,startTime,endTime,taskId\n");
 
-            if (inMemory.getTaskAll() != null) {
-                for (Task task : inMemory.getTaskAll()) {
+            if (!inMemory.getTaskAll().isEmpty()) {
+                for (String task : inMemory.getTaskAll()) {
                     writer.write("ID_TASK,");
                     writer.write(csv.toString(task));
                 }
             }
 
-            if (inMemory.getEpicAll() != null) {
-                for (Epic epic : inMemory.getEpicAll()) {
+            if (!inMemory.getEpicAll().isEmpty()) {
+                for (String epic : inMemory.getEpicAll()) {
                     writer.write("ID_EPIC,");
                     writer.write(csv.toString(epic));
                 }
             }
 
-            if (inMemory.getSubtaskAll() != null) {
-                for (Subtask subtask : inMemory.getSubtaskAll()) {
+            if (!inMemory.getSubtaskAll().isEmpty()) {
+                for (String subtask : inMemory.getSubtaskAll()) {
                     writer.write("ID_SUBTASK,");
                     writer.write(csv.toString(subtask));
                 }
@@ -61,22 +61,22 @@ public class FileBackedTaskManager implements TaskManage {
     }
 
     @Override
-    public List<Task> getTaskAll() {
-        List<Task> list = inMemory.getTaskAll();
+    public List<String> getTaskAll() {
+        List<String> list = inMemory.getTaskAll();
         save();
         return list;
     }
 
     @Override
-    public List<Epic> getEpicAll() {
-        List<Epic> list = inMemory.getEpicAll();
+    public List<String> getEpicAll() {
+        List<String> list = inMemory.getEpicAll();
         save();
         return list;
     }
 
     @Override
-    public List<Subtask> getSubtaskAll() {
-        List<Subtask> list = inMemory.getSubtaskAll();
+    public List<String> getSubtaskAll() {
+        List<String> list = inMemory.getSubtaskAll();
         save();
         return list;
     }
@@ -191,12 +191,12 @@ public class FileBackedTaskManager implements TaskManage {
         return tasks;
     }
 
-    @Override
-    public List<Task> getPrioritizedTaskList() {
-        List<Task> tasks = inMemory.getPrioritizedTaskList();
-        save();
-        return  tasks;
-    }
+//    @Override
+//    public List<Task> getPrioritizedTaskList() {
+//        List<Task> tasks = inMemory.getPrioritizedTaskList();
+//        save();
+//        return  tasks;
+//    }
 
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);

@@ -1,2 +1,5 @@
 ID_TYPE,id,type,name,status,description,duration,startTime,endTime,taskId
-ID_HISTORY,
+ID_TASK,1,TASK,Задача,NEW,grey54y54y,0,30.09.2025 12:53,0,2
+ID_EPIC,2,EPIC,Эпик,NEW,grey54y54y,0,30.09.2025 12:53,0,1
+ID_SUBTASK,3,SUBTASK,Подзадача,NEW,5y5y54wyw46,0,30.09.2025 12:54,0,2
+ID_HISTORY,1,2,3,

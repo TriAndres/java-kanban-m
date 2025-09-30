@@ -7,19 +7,17 @@ import java.util.ArrayList;
 public class Epic extends Task {
 
     public Epic() {
-        this.id = getId();
-        this.type = TaskType.EPIC;
-        this.name = "Эпик";
-        this.status = Status.NEW;
-        this.duration = Duration.ZERO;
-        this.startTime = LocalDateTime.now();
-        this.endTime = LocalDateTime.now();
-        if (this.subtaskIdList == null) {
-            this.subtaskIdList = new ArrayList<>();
-        }
     }
 
-    public Epic(Long id, TaskType type, String name, Status status, String description, Duration duration, LocalDateTime startTime, LocalDateTime endTime, Long idTask) {
+    public Epic(Long id,
+                TaskType type,
+                String name,
+                Status status,
+                String description,
+                String duration,
+                String startTime,
+                String endTime,
+                Long idTask) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -40,15 +38,6 @@ public class Epic extends Task {
         }
         if (this.status == null) {
             this.status = Status.NEW;
-        }
-        if (this.duration == null) {
-            this.duration = Duration.ZERO;
-        }
-        if (this.startTime == null) {
-            this.startTime = LocalDateTime.now();
-        }
-        if (this.endTime == null) {
-            this.endTime = LocalDateTime.now();
         }
         if (this.subtaskIdList == null) {
             this.subtaskIdList = new ArrayList<>();

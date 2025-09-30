@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSV {
-    protected static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-    public String toString(Task task) {
-        String[] line = task.toString().split("/");
+    public String toString(String task) {
+        String[] line = task.split("/");
         return String.join(",",
                 line[0],
                 line[1],
@@ -36,9 +35,9 @@ public class CSV {
                             line[3],
                             Status.valueOf(line[4].toUpperCase()),
                             line[5],
-                            Duration.parse(line[6]),
-                            LocalDateTime.parse(line[7]),
-                            LocalDateTime.parse(line[8]),
+                            line[6],
+                            line[7],
+                            line[8],
                             Long.parseLong(line[9])
                     )
             );
@@ -51,9 +50,9 @@ public class CSV {
                             line[3],
                             Status.valueOf(line[4].toUpperCase()),
                             line[5],
-                            Duration.parse(line[6]),
-                            LocalDateTime.parse(line[7]),
-                            LocalDateTime.parse(line[8]),
+                            line[6],
+                            line[7],
+                            line[8],
                             Long.parseLong(line[9])
                     )
             );
@@ -66,9 +65,9 @@ public class CSV {
                             line[3],
                             Status.valueOf(line[4].toUpperCase()),
                             line[5],
-                            Duration.parse(line[6]),
-                            LocalDateTime.parse(line[7]),
-                            LocalDateTime.parse(line[8]),
+                            line[6],
+                            line[7],
+                            line[8],
                             Long.parseLong(line[9])
                     )
             );

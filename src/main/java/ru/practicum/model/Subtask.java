@@ -6,16 +6,17 @@ import java.time.LocalDateTime;
 public class Subtask extends Task {
 
     public Subtask() {
-        this.id = getId();
-        this.type = TaskType.SUBTASK;
-        this.name = "Подзадача";
-        this.status = Status.NEW;
-        this.duration = Duration.ZERO;
-        this.startTime = LocalDateTime.now();
-        this.endTime = LocalDateTime.now();
     }
 
-    public Subtask(Long id, TaskType type, String name, Status status, String description, Duration duration, LocalDateTime startTime, LocalDateTime endTime,  Long idEpic) {
+    public Subtask(Long id,
+                   TaskType type,
+                   String name,
+                   Status status,
+                   String description,
+                   String duration,
+                   String startTime,
+                   String endTime,
+                   Long idEpic) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -36,15 +37,6 @@ public class Subtask extends Task {
         }
         if (this.status == null) {
             this.status = Status.NEW;
-        }
-        if (this.duration == null) {
-            this.duration = Duration.ZERO;
-        }
-        if (this.startTime == null) {
-            this.startTime = LocalDateTime.now();
-        }
-        if (this.endTime == null) {
-            this.endTime = LocalDateTime.now();
         }
     }
 }

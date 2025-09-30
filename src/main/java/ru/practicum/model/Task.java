@@ -12,25 +12,24 @@ public class Task {
     protected String name;
     protected Status status;
     protected String description;
-    protected Duration duration;
-    protected LocalDateTime startTime;
-    protected LocalDateTime endTime;
+    protected String duration;
+    protected String startTime;
+    protected String endTime;
     protected Long taskId;
     protected List<Long> subtaskIdList;
-    protected final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public Task() {
-        this.id = getId();
-        this.type = TaskType.TASK;
-        this.name = "Задача";
-        this.status = Status.NEW;
-        this.duration = Duration.ZERO;
-        this.startTime = LocalDateTime.now();
-        this.endTime = LocalDateTime.now();
     }
 
-
-    public Task(Long id, TaskType type, String name, Status status, String description, Duration duration, LocalDateTime startTime, LocalDateTime endTime, Long taskId) {
+    public Task(Long id,
+                TaskType type,
+                String name,
+                Status status,
+                String description,
+                String duration,
+                String startTime,
+                String endTime,
+                Long taskId) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -51,15 +50,6 @@ public class Task {
         }
         if (this.status == null) {
             this.status = Status.NEW;
-        }
-        if (this.duration == null) {
-            this.duration = Duration.ZERO;
-        }
-        if (this.startTime == null) {
-            this.startTime = LocalDateTime.now();
-        }
-        if (this.endTime == null) {
-            this.endTime = LocalDateTime.now();
         }
     }
 
@@ -103,28 +93,28 @@ public class Task {
         this.description = description;
     }
 
-    public Duration getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 
-    public LocalDateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = startTime;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public Long getTaskId() {
