@@ -1,10 +1,12 @@
 package ru.practicum.controller;
 
 import ru.practicum.fileCSV.FileBackedTaskManager;
-import ru.practicum.memory.TaskManage;
 import ru.practicum.history.HistoryManager;
-import ru.practicum.history.InMemoryHistoryManager;
+import ru.practicum.history.inMemoryHistoryManager;
 import ru.practicum.memory.InMemoryTaskManager;
+import ru.practicum.memory.TaskManage;
+import ru.practicum.prioritized.InMemoryTaskPrioritized;
+import ru.practicum.prioritized.TaskPrioritized;
 
 import java.io.File;
 import java.util.Scanner;
@@ -17,16 +19,19 @@ public class Managers {
         return new InMemoryTaskManager();
     }
 
-    public static InMemoryHistoryManager getDefaultHistory() {
-        return new InMemoryHistoryManager();
+    public static TaskManage detDefaultFile() {
+        return loadFromFile(file);
     }
 
-    public static FileBackedTaskManager detDefaultFile() {
-        return loadFromFile(file);
+    public static inMemoryHistoryManager getDefaultHistory() {
+        return new inMemoryHistoryManager();
+    }
+
+    public static TaskPrioritized getDefaultTaskPrioritized() {
+        return new InMemoryTaskPrioritized();
     }
 
     public static Scanner scanner(){
         return new Scanner(System.in);
     }
-
 }

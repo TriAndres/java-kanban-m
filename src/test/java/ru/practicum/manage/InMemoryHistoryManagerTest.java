@@ -1,16 +1,5 @@
 package ru.practicum.manage;
 
-import org.junit.jupiter.api.Test;
-import ru.practicum.history.HistoryManager;
-import ru.practicum.controller.Managers;
-import ru.practicum.model.Task;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static ru.practicum.model.Status.NEW;
-import static ru.practicum.model.TaskType.TASK;
-
 class InMemoryHistoryManagerTest {
 //    private final HistoryManager historyManager = Managers.getDefaultHistory();
 //

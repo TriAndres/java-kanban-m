@@ -1,11 +1,4 @@
-ID_TYPE,id,type,name,status,description,duration,startTime,taskId
-ID_TASK,1,TASK,Задача,NEW,cdcd,PT0S,29.09.2025 17:07,0
-ID_TASK,2,TASK,Задача,NEW,efwefe,PT0S,29.09.2025 17:27,0
-ID_TASK,3,TASK,Задача,NEW,fsdffrf,PT0S,29.09.2025 17:42,0
-ID_TASK,4,TASK,Задача,NEW,eferrfer,PT0S,29.09.2025 17:46,0
-ID_TASK,5,TASK,Задача,NEW,dfrferfre,PT0S,29.09.2025 17:46,0
-ID_EPIC,6,EPIC,Эпик,NEW,efwefe,PT0S,31.12.+999999999 23:59,2
-ID_EPIC,7,EPIC,Эпик,NEW,fsdffrf,PT0S,31.12.+999999999 23:59,4
-ID_EPIC,8,EPIC,Эпик,NEW,eferrfer,PT0S,31.12.+999999999 23:59,6
-ID_EPIC,9,EPIC,Эпик,NEW,dfrferfre,PT0S,31.12.+999999999 23:59,8
-ID_HISTORY,1,2,3,4,5,6,7,8,9,
+ID_TYPE,id,type,name,status,description,duration,startTime,endTime,taskId
+ID_TASK,1,TASK,Задача,NEW,grgt,0,01.10.2025 00:21,0,2
+ID_EPIC,2,EPIC,Эпик,NEW,grgt,0,01.10.2025 00:21,0,1
+ID_HISTORY,1,2,

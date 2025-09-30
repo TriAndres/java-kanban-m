@@ -1,11 +1,7 @@
 package ru.practicum.model;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public class Task {
     protected Long id;
@@ -13,18 +9,24 @@ public class Task {
     protected String name;
     protected Status status;
     protected String description;
-    protected Duration duration;
-    protected LocalDateTime startTime;
-    protected LocalDateTime endTime;
+    protected String duration;
+    protected String startTime;
+    protected String endTime;
     protected Long taskId;
     protected List<Long> subtaskIdList;
-    protected  final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public Task() {
     }
 
-
-    public Task(Long id, TaskType type, String name, Status status, String description, Duration duration, LocalDateTime startTime,  Long taskId) {
+    public Task(Long id,
+                TaskType type,
+                String name,
+                Status status,
+                String description,
+                String duration,
+                String startTime,
+                String endTime,
+                Long taskId) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -32,6 +34,7 @@ public class Task {
         this.description = description;
         this.duration = duration;
         this.startTime = startTime;
+        this.endTime = endTime;
         this.taskId = taskId;
         if (this.id == null || this.id == 0) {
             this.id = getId();
@@ -44,9 +47,6 @@ public class Task {
         }
         if (this.status == null) {
             this.status = Status.NEW;
-        }
-        if (this.duration == null) {
-            this.duration = Duration.ZERO;
         }
     }
 
@@ -90,27 +90,27 @@ public class Task {
         this.description = description;
     }
 
-    public Duration getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 
-    public LocalDateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -150,7 +150,8 @@ public class Task {
                 "/" + status +
                 "/" + description +
                 "/" + duration +
-                "/" + startTime.format(formatter) +
+                "/" + startTime +
+                "/" + endTime +
                 "/" + taskId +
                 "\n";
     }

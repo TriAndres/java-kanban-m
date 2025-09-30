@@ -4,7 +4,7 @@ import ru.practicum.model.Task;
 
 import java.util.*;
 
-public class InMemoryHistoryManager implements HistoryManager {
+public class inMemoryHistoryManager implements HistoryManager{
     private final Map<Long, Node<Task>> historyMap = new HashMap<>();
     private Node<Task> first;
     private Node<Task> last;

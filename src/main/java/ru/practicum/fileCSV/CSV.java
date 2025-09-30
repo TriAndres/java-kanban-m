@@ -1,7 +1,5 @@
 package ru.practicum.fileCSV;
 
-import ru.practicum.history.HistoryManager;
-import ru.practicum.memory.InMemoryTaskManager;
 import ru.practicum.model.*;
 
 import java.time.Duration;
@@ -11,10 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSV {
-    protected static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-    public String toString(Task task) {
-        String[] line = task.toString().split("/");
+    public String toString(String task) {
+        String[] line = task.split("/");
         return String.join(",",
                 line[0],
                 line[1],
@@ -23,7 +20,8 @@ public class CSV {
                 line[4],
                 line[5],
                 line[6],
-                line[7]
+                line[7],
+                line[8]
         );
     }
 
@@ -37,9 +35,10 @@ public class CSV {
                             line[3],
                             Status.valueOf(line[4].toUpperCase()),
                             line[5],
-                            Duration.parse(line[6]),
-                            LocalDateTime.parse(line[7], formatter),
-                            Long.parseLong(line[8])
+                            line[6],
+                            line[7],
+                            line[8],
+                            Long.parseLong(line[9])
                     )
             );
         }
@@ -51,9 +50,10 @@ public class CSV {
                             line[3],
                             Status.valueOf(line[4].toUpperCase()),
                             line[5],
-                            Duration.parse(line[6]),
-                            LocalDateTime.parse(line[7], formatter),
-                            Long.parseLong(line[8])
+                            line[6],
+                            line[7],
+                            line[8],
+                            Long.parseLong(line[9])
                     )
             );
         }
@@ -65,23 +65,14 @@ public class CSV {
                             line[3],
                             Status.valueOf(line[4].toUpperCase()),
                             line[5],
-                            Duration.parse(line[6]),
-                            LocalDateTime.parse(line[7], formatter),
-                            Long.parseLong(line[8])
+                            line[6],
+                            line[7],
+                            line[8],
+                            Long.parseLong(line[9])
                     )
             );
         }
     }
-
-//    public String historyToString(String script) {
-//        String[] lines = script.split("/");
-//        String line = "";
-//        for (String taskId : lines) {
-//            System.out.println(taskId);
-//            line += taskId + ",";
-//        }
-//        return line;
-//    }
 
     public String historyToString(Task task) {
         return String.join(",",String.valueOf(task.getId()) + ",");
