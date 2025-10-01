@@ -10,7 +10,11 @@ import ru.practicum.prioritized.TaskPrioritized;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 public class InMemoryTaskManager implements TaskManage {
     private static long idCount;
@@ -20,10 +24,12 @@ public class InMemoryTaskManager implements TaskManage {
 
     private final inMemoryHistoryManager historyManager;
     private final TaskPrioritized prioritized;
+    private final DateTimeFormatter formatter;
 
     public InMemoryTaskManager() {
         historyManager = Managers.getDefaultHistory();
         prioritized = Managers.getDefaultTaskPrioritized();
+        formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     }
 
     @Override
@@ -311,46 +317,49 @@ public class InMemoryTaskManager implements TaskManage {
     public void statusEpic(Epic epic) {
         if (epic != null) {
             if (epicMap.containsKey(epic.getId())) {
-                List<Subtask> list = getListSubtaskIdEpic(epic.getId());
-                int countStatusNew = 0;
-                int countStatusDone = 0;
-                if (list == null) {
+                Task task = getTaskById(epic.getTaskId());
+                if (epic.getSubtaskIdList().isEmpty()) {
                     epic.setStatus(Status.NEW);
-                    if (taskMap.containsKey(epic.getTaskId())) {
-                        Task task = taskMap.get(epic.getTaskId());
-                        task.setStatus(Status.NEW);
-                    }
+                    task.setStatus(Status.NEW);
+                    epic.setEndTime("0");
+                    task.setEndTime("0");
                 } else {
-                    for (Subtask subtask : list) {
-                        if (subtask != null) {
-                            if (subtask.getStatus().equals(Status.NEW)) {
-                                countStatusNew++;
-                                if (countStatusNew == list.size()) {
-                                    epic.setStatus(Status.NEW);
-                                    if (taskMap.containsKey(epic.getTaskId())) {
-                                        Task task = taskMap.get(epic.getTaskId());
-                                        task.setStatus(Status.NEW);
-                                    }
-                                }
-                            } else if (subtask.getStatus().equals(Status.DONE)) {
-                                for (Subtask epicSubtask : list) {
-                                    countStatusDone++;
-                                    if (countStatusDone == list.size()) {
-                                        epic.setStatus(Status.DONE);
-                                        if (taskMap.containsKey(epic.getTaskId())) {
-                                            Task task = taskMap.get(epic.getTaskId());
-                                            task.setStatus(Status.DONE);
-                                        }
-                                    }
-                                }
-                            } else {
-                                epic.setStatus(Status.IN_PROGRESS);
-
-                                if (taskMap.containsKey(epic.getTaskId())) {
-                                    Task task = taskMap.get(epic.getTaskId());
-                                    task.setStatus(Status.IN_PROGRESS);
-
-                                }
+                    List<Long> subtaskNew = new ArrayList<>(epic.getSubtaskIdList());
+                    int countDone = 0;
+                    int countNew = 0;
+                    for (Long subtaskId : subtaskNew) {
+                        if (subtaskMap.get(subtaskId).getStatus().equals(Status.DONE)) {
+                            countDone++;
+                        }
+                        if (subtaskMap.get(subtaskId).getStatus().equals(Status.NEW)) {
+                            countNew++;
+                            subtaskMap.get(subtaskId).setEndTime("0");
+                        }
+                        if (countDone == epic.getSubtaskIdList().size()) {
+                            epic.setStatus(Status.DONE);
+                            task.setStatus(Status.DONE);
+                            LocalDateTime localDateTime = LocalDateTime.now();
+                            String time1 = localDateTime.format(formatter);
+                            epic.setEndTime(time1);
+                            task.setEndTime(time1);
+                            for (Long subtaskId1 : subtaskNew) {
+                                subtaskMap.get(subtaskId1).setEndTime(time1);
+                            }
+                        } else if (countNew == epic.getSubtaskIdList().size()) {
+                            epic.setStatus(Status.NEW);
+                            task.setStatus(Status.NEW);
+                            epic.setEndTime("0");
+                            task.setEndTime("0");
+                            for (Long subtaskId2 : subtaskNew) {
+                                subtaskMap.get(subtaskId2).setEndTime("0");
+                            }
+                        } else {
+                            epic.setStatus(Status.IN_PROGRESS);
+                            task.setStatus(Status.IN_PROGRESS);
+                            epic.setEndTime("0");
+                            task.setEndTime("0");
+                            for (Long subtaskId3 : subtaskNew) {
+                                subtaskMap.get(subtaskId3).setEndTime("0");
                             }
                         }
                     }
@@ -360,71 +369,47 @@ public class InMemoryTaskManager implements TaskManage {
         }
     }
 
+
     public void setEpicDuration(Epic epic) {
- //       if (epic != null) {
- //           if (epic.getStartTime() != null && epic.getEndTime() != null) {
-//                List<Long> subtaskList = epic.getSubtaskIdList();
- //               Duration epicDuration = Duration.ZERO;
-//                LocalDateTime startTime = LocalDateTime.MAX;
-//                LocalDateTime endTime = LocalDateTime.MIN;
-//                if (!subtaskList.isEmpty()) {
-//                    for (Long taskId : subtaskList) {
-//                        Subtask subtask = subtaskMap.get(taskId);
-//                        if (subtask.getStartTime().isBefore(startTime)) {
-//                            startTime = subtask.getStartTime();
-//                        }
-//                        if (subtask.getEndTime().isAfter(endTime)) {
-//                            endTime = subtask.getEndTime();
-//                        }
-//                    }
-//                    epicDuration = Duration.between(startTime, endTime);
-//                    epic.setStartTime(startTime);
-//                    epic.setEndTime(endTime);
-
- //               epicDuration = Duration.between(epic.getStartTime(), epic.getEndTime());
-//                epic.setStartTime(startTime);
-//                epic.setEndTime(endTime);
-//                }
- //               epic.setDuration(epicDuration);
- //           }
- //      }
-
-        //if (epic != null) {
-//            Task task = taskMap.get(epicMap.get(epic.getId()).getTaskId());
-//            Epic epic1 = epicMap.get(epic.getId());
-//            if (!epic1.getSubtaskIdList().isEmpty()) {
-//                for (Long subtaskId : epic1.getSubtaskIdList()) {
-//                    Subtask subtask = subtaskMap.get(subtaskId);
-//                    subtask.setStartTime(LocalDateTime.now());
-//                    if ((subtaskMap.get(subtaskId).getStatus().equals(Status.DONE))) {
-//                        subtask.setEndTime(LocalDateTime.now());
-//                        subtask.setDuration(Duration.between(subtask.getStartTime(), subtask.getEndTime()));
-//                    } else {
-//                        subtask.setEndTime(subtask.getStartTime());
-//                        subtask.setDuration(Duration.ZERO);
-//                    }
-//                    subtaskMap.put(subtask.getId(), subtask);
-//                }
-//            }
-//            epic1.setStartTime(LocalDateTime.now());
-//            if (epic1.getStatus().equals(Status.DONE)) {
-//                epic1.setEndTime(LocalDateTime.now());
-//                epic1.setDuration(Duration.between(epic1.getStartTime(),epic1.getEndTime()));
-//            } else {
-//                epic1.setEndTime(epic1.getStartTime());
-//                epic1.setDuration(Duration.ZERO);
-//            }
-//            epicMap.put(epic1.getId(), epic1);
-//            task.setStartTime(LocalDateTime.now());
-//            if (task.getStatus().equals(Status.DONE)) {
-//                task.setEndTime(LocalDateTime.now());
-//                task.setDuration(Duration.between(task.getStartTime(), task.getEndTime()));
-//            } else {
-//                task.setEndTime(task.getEndTime());
-//                task.setDuration(Duration.ZERO);
-//            }
-//            taskMap.put(task.getId(), task);
-        //}
+        if (epic != null) {
+            if (epicMap.containsKey(epic.getId())) {
+                Task task = getTaskById(epic.getTaskId());
+                if (!task.getStartTime().equals("0") && !task.getEndTime().equals("0")) {
+                    Long minute = Duration.between(
+                                    LocalDateTime.parse(task.getStartTime(), formatter),
+                                    LocalDateTime.parse(task.getEndTime(), formatter)
+                            )
+                            .toMinutes();
+                    task.setDuration(String.valueOf(minute));
+                } else {
+                    task.setDuration("0");
+                }
+                if (!epic.getStartTime().equals("0") && !epic.getEndTime().equals("0")) {
+                    Long minute = Duration.between(
+                                    LocalDateTime.parse(epic.getStartTime(), formatter),
+                                    LocalDateTime.parse(epic.getEndTime(), formatter)
+                            )
+                            .toMinutes();
+                    epic.setDuration(String.valueOf(minute));
+                } else {
+                    epic.setDuration("0");
+                }
+                List<Long> subtaskList = new ArrayList<>(epic.getSubtaskIdList());
+                for (Long taskId : subtaskList) {
+                    Subtask subtask = subtaskMap.get(taskId);
+                    if (!subtask.getStartTime().equals("0") && !subtask.getEndTime().equals("0")) {
+                        Long minute = Duration.between(
+                                        LocalDateTime.parse(subtask.getStartTime(), formatter),
+                                        LocalDateTime.parse(subtask.getEndTime(), formatter)
+                                )
+                                .toMinutes();
+                        subtask.setDuration(String.valueOf(minute));
+                    } else {
+                        subtask.setDuration("0");
+                    }
+                }
+            }
+        }
     }
 
     public boolean validate(Task task) {
@@ -448,21 +433,21 @@ public class InMemoryTaskManager implements TaskManage {
         return false;
     }
 
-//    public void prioritizedRemove(Task task) {
-//        prioritized.prioritizedRemove(task);
-//    }
-//
-//    public void prioritizedAdd(Task task) {
-//
+    public void prioritizedRemove(Task task) {
+        prioritized.prioritizedRemove(task);
+    }
+
+    public void prioritizedAdd(Task task) {
+
 //        if (task instanceof Epic epic) {
 //            setEpicDuration(epic);
 //        }
 //        prioritized.prioritizedAdd(task);
-//    }
-//
-//    public List<Task> getPrioritizedTaskList() {
-//        return prioritized.getPrioritizedTaskList();
-//    }
+    }
+
+    public List<Task> getPrioritizedTaskList() {
+        return prioritized.getPrioritizedTaskList();
+    }
 
     private static long getNextId() {
         return ++idCount;

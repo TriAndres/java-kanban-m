@@ -17,96 +17,9 @@ import static ru.practicum.model.Status.NEW;
 
 
 public class Main {
-//
-//    public static void main(String[] args) {
-//
-//         final TaskManage manage = detDefaultFile();
-//        Epic epic = new Epic(
-//                null,
-//                null,
-//                null,
-//                null,
-//                "описание эпика 1",
-//                null,
-//                null,
-//                null,
-//                0L
-//        );
-//        manage.createEpic(epic);
-//        Epic epic1 = manage.getEpicById(1L);
-//        System.out.println(epic1);
-
-////Данная задача должна быть 4 по счёту
-//        Subtask subtask1 = new Subtask(
-//                null,
-//                null,
-//                "новая подзадача 1",
-//                Status.NEW,
-//                "описание подзадачи 1",
-//                Duration.ofMinutes(15),
-//                LocalDateTime.of(2022, 12, 30, 0, 30).plusDays(2),
-//                null,
-//                epic.getId()
-//        );
-//        manage.createSubtask(subtask1);
-//        Subtask subtask11 = manage.getSubtaskById(2L);
-//        System.out.println(subtask11);
-////Данная задача должна быть 1 по счёту
-//        Subtask subtask2 = new Subtask(
-//                null,
-//                null,
-//                "новая подзадача 2",
-//                Status.NEW,
-//                "описание подзадачи 2",
-//                Duration.ofMinutes(30),
-//                LocalDateTime.of(2022, 12, 30, 0, 30),
-//                null,
-//                epic.getId()
-//        );
-//        manage.createSubtask(subtask2);
-//        Subtask subtask22 = manage.getSubtaskById(3L);
-//        System.out.println(subtask22);
-////Данная задача должна быть 3 по счёту
-//        Subtask subtask3 = new Subtask(
-//                null,
-//                null,
-//                "новая подзадача 3",
-//                Status.NEW,
-//                "описание подзадачи 3",
-//                Duration.ofMinutes(45),
-//                LocalDateTime.of(2022, 12, 30, 0, 30).plusDays(1),
-//                null,
-//                epic.getId()
-//        );
-//        manage.createSubtask(subtask3);
-//        Subtask subtask33 = manage.getSubtaskById(3L);
-//        System.out.println(subtask33);
-////Данная задача должна быть 2 по счёту
-//        Subtask subtask4 = new Subtask(null,
-//                null,
-//                "новая подзадача 4",
-//                Status.NEW,
-//                "описание подзадачи 4",
-//                Duration.ofMinutes(60),
-//                LocalDateTime.of(2022, 12, 30, 0, 30).plusHours(12),
-//                null,
-//                epic.getId()
-//        );
-//        manage.createSubtask(subtask4);
-//        Subtask subtask44 = manage.getSubtaskById(4L);
-//        System.out.println(subtask44);
-    /// /Порядок добавления следующий subtask1 -> subtask2 -> subtask3 -> subtask4
-    /// /Порядок следующий subtask2 -> subtask4 -> subtask3 -> subtask1
-//        System.out.println(epic.getDuration() + " == " + (subtask1.getDuration().plus(subtask2.getDuration().plus(subtask3.getDuration())).plus(subtask4.getDuration()) + " " + (epic.getDuration().equals(subtask1.getDuration().plus((subtask2.getDuration().plus((subtask3.getDuration()).plus(subtask4.getDuration()))))))));
-//        System.out.println(epic.getStartTime() + " == " + subtask2.getStartTime() + " " + epic.getStartTime().equals(subtask2.getStartTime()));
-//        System.out.println(epic.getEndTime() + " == " + subtask1.getEndTime() + " " + epic.getEndTime().equals(subtask1.getEndTime()));
-//        System.out.println(manage.getPrioritizedTaskList().stream().map(Task::getName).collect(Collectors.toList()));
-    //   }
-
-
-    private final Scanner scanner = Managers.scanner();
+private final Scanner scanner = Managers.scanner();
     private final TaskManage manage = detDefaultFile();
-    protected final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public static void main(String[] args) {
         new Main().game();
