@@ -56,7 +56,15 @@ public interface TaskManage {
     default void statusEpic(Epic epic) {
     }
 
-    default List<Task> getPrioritizedTaskList() {
-        return List.of();
+    default void prioritizedRemove(Task task) {
+
     }
+
+    default void prioritizedAdd(Task task) {
+
+    }
+
+    List<Task> getPrioritizedTaskList();
+
+    boolean isPrioritizedValidation(Task task);
 }
