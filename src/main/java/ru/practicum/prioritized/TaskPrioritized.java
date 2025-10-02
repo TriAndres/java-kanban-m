@@ -8,4 +8,5 @@ public interface TaskPrioritized {
     void prioritizedRemove(Task task);
     void prioritizedAdd(Task task);
     List<Task> getPrioritizedTaskList();
+    boolean validate(Task task);
 }
