@@ -23,7 +23,7 @@ public class Managers {
         return loadFromFile(file);
     }
 
-    public static inMemoryHistoryManager getDefaultHistory() {
+    public static HistoryManager getDefaultHistory() {
         return new inMemoryHistoryManager();
     }
 

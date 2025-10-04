@@ -203,13 +203,18 @@ private final Scanner scanner = Managers.scanner();
                                 NEW - не решёная подзадача.
                                 DONE - решил подзадачу.
                                 """);
+                        LocalDateTime localDateTime = LocalDateTime.now();
+                        String time = localDateTime.format(formatter);
+
                         String status = new Scanner(System.in).next();
                         switch (status.toUpperCase()) {
                             case "NEW":
                                 subtask.setStatus(NEW);
+                                subtask.setEndTime("0");
                                 break;
                             case "DONE":
                                 subtask.setStatus(DONE);
+                                subtask.setEndTime(time);
                                 break;
                             default:
                                 System.out.println("Выбирите команду из списка.");

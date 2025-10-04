@@ -1,6 +1,7 @@
 package ru.practicum.memory;
 
 import ru.practicum.controller.Managers;
+import ru.practicum.history.HistoryManager;
 import ru.practicum.history.inMemoryHistoryManager;
 import ru.practicum.model.Epic;
 import ru.practicum.model.Status;
@@ -22,7 +23,7 @@ public class InMemoryTaskManager implements TaskManage {
     private final HashMap<Long, Subtask> subtaskMap = new HashMap<>();
     private final HashMap<Long, Epic> epicMap = new HashMap<>();
 
-    private final inMemoryHistoryManager historyManager;
+    private final HistoryManager historyManager;
     private final TaskPrioritized prioritized;
     private final DateTimeFormatter formatter;
 
@@ -88,6 +89,7 @@ public class InMemoryTaskManager implements TaskManage {
             epic.setId(getNextId());
             epicMap.put(epic.getId(), epic);
             statusEpic(epic);
+            prioritizedAdd(epic);
             return epic;
         }
         return null;
@@ -105,8 +107,8 @@ public class InMemoryTaskManager implements TaskManage {
                 list.add(subtask.getId());
                 epic.setSubtaskIdList(list);
                 epicMap.put(epic.getId(), epic);
-                prioritizedAdd(subtask);
                 statusEpic(epic);
+                prioritizedAdd(subtask);
             }
             return subtask;
         }
@@ -208,10 +210,12 @@ public class InMemoryTaskManager implements TaskManage {
             Epic epic = epicMap.get(id);
             for (Long subtaskId : epic.getSubtaskIdList()) {
                 if (epic.getId().equals(subtaskId)) {
+                    prioritizedRemove(subtaskMap.get(subtaskId));
                     removeHistory(subtaskId);
                     subtaskMap.remove(subtaskId);
                 }
             }
+            prioritizedRemove(epicMap.get(id));
             removeHistory(id);
             epicMap.remove(id);
             statusEpic(epic);
@@ -240,6 +244,7 @@ public class InMemoryTaskManager implements TaskManage {
     public void deleteTaskAll() {
         for (Long id : taskMap.keySet()) {
             removeHistory(id);
+            prioritizedRemove(taskMap.get(id));
         }
         taskMap.clear();
     }
@@ -248,9 +253,12 @@ public class InMemoryTaskManager implements TaskManage {
     public void deleteEpicAll() {
         for (Long id : epicMap.keySet()) {
             removeHistory(id);
+            prioritizedRemove(subtaskMap.get(id));//
+
         }
         for (Long id : subtaskMap.keySet()) {
             removeHistory(id);
+            prioritizedRemove(subtaskMap.get(id));//
         }
         epicMap.clear();
         subtaskMap.clear();
@@ -262,7 +270,7 @@ public class InMemoryTaskManager implements TaskManage {
             for (Long subtaskId : epic.getSubtaskIdList()) {
                 subtaskMap.remove(subtaskId);
                 removeHistory(subtaskId);
-                prioritizedRemove(subtaskMap.get(subtaskId));
+                prioritizedRemove(subtaskMap.get(subtaskId));//
             }
             statusEpic(epic);
         }
