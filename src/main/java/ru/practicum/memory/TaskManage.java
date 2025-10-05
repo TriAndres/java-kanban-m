@@ -66,5 +66,7 @@ public interface TaskManage {
 
     List<Task> getPrioritizedTaskList();
 
-    boolean isPrioritizedValidation(Task task);
+     default boolean isPrioritizedValidation(Task task) {
+         return false;
+     }
 }
