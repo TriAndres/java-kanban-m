@@ -225,7 +225,7 @@ private final Scanner scanner = Managers.scanner();
                                                 LocalDateTime.parse(subtask.getEndTime(), formatter)
                                         )
                                         .toMinutes();
-                                subtask.setDescription(String.valueOf(minute));
+                                subtask.setDuration(String.valueOf(minute));
                                 break;
                             default:
                                 System.out.println("Выбирите команду из списка.");
