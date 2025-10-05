@@ -1,5 +1,0 @@
-ID_TYPE,id,type,name,status,description,duration,startTime,endTime,taskId
-ID_TASK,1,TASK,Задача,DONE,hhghdh,1,01.10.2025 12:42,01.10.2025 12:43,2
-ID_EPIC,2,EPIC,Эпик,DONE,hhghdh,1,01.10.2025 12:42,01.10.2025 12:43,1
-ID_SUBTASK,3,SUBTASK,Подзадача,DONE,afewfwe,1,01.10.2025 12:42,01.10.2025 12:43,2
-ID_HISTORY,1,2,3,

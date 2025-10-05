@@ -7,6 +7,7 @@ import ru.practicum.model.Epic;
 import ru.practicum.model.Subtask;
 import ru.practicum.model.Task;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -41,8 +42,9 @@ private final Scanner scanner = Managers.scanner();
                 4 - вывод статистику задачи.
                 5 - вывод статистику всех задач.
                 6 - просмотр истории.
-                7 - удалить задачу.
-                8 - удалить все задачи.
+                7 - просмотр приоритета.
+                8 - удалить задачу.
+                9 - удалить все задачи.
                 0 - выход из программы.
                 """);
         return scanner.nextLine();
@@ -72,9 +74,12 @@ private final Scanner scanner = Managers.scanner();
                 showTaskHistory();
                 break;
             case "7":
-                deleteTaskEpicSubtaskById();
+                showPrioritized();
                 break;
             case "8":
+                deleteTaskEpicSubtaskById();
+                break;
+            case "9":
                 deleteTaskAll();
                 break;
             default:
@@ -207,13 +212,25 @@ private final Scanner scanner = Managers.scanner();
                         switch (status.toUpperCase()) {
                             case "NEW":
                                 subtask.setStatus(NEW);
+                                subtask.setDuration("0");
+                                subtask.setEndTime("0");
                                 break;
                             case "DONE":
                                 subtask.setStatus(DONE);
+                                LocalDateTime localDateTime = LocalDateTime.now();
+                                String time1 = localDateTime.format(formatter);
+                                subtask.setEndTime(time1);
+                                Long minute = Duration.between(
+                                                LocalDateTime.parse(subtask.getStartTime(), formatter),
+                                                LocalDateTime.parse(subtask.getEndTime(), formatter)
+                                        )
+                                        .toMinutes();
+                                subtask.setDescription(String.valueOf(minute));
                                 break;
                             default:
                                 System.out.println("Выбирите команду из списка.");
                         }
+
                         manage.updateSubtask(subtask);
                         System.out.println("Записано:\n" + subtask.toString());
                         if (status.equals("NEW") ||
@@ -284,6 +301,14 @@ private final Scanner scanner = Managers.scanner();
             System.out.println("getHistory()\n");
         } else {
             System.out.println("Список пуст, добавьте задачу.\n");
+        }
+    }
+
+    public void showPrioritized() {
+        if (!manage.getPrioritizedTaskList().isEmpty()) {
+            for (Task task : manage.getPrioritizedTaskList()) {
+                System.out.println(task);
+            }
         }
     }
 
