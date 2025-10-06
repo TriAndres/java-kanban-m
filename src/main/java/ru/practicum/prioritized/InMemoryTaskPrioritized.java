@@ -2,6 +2,7 @@ package ru.practicum.prioritized;
 
 import ru.practicum.model.Task;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -30,6 +31,20 @@ public class InMemoryTaskPrioritized implements TaskPrioritized {
     }
 
     public boolean validate(Task task) {
+        boolean flag = true;
+        if (prioritized.contains(task)) {
+            for (Task listTask : prioritized) {
+                if (LocalDateTime.parse(task.getStartTime(), formatter).isBefore(LocalDateTime.parse(listTask.getStartTime(), formatter))
+                        && LocalDateTime.parse(task.getEndTime(), formatter).isBefore(LocalDateTime.parse(listTask.getEndTime(), formatter))
+                        || LocalDateTime.parse(task.getStartTime(), formatter).isAfter(LocalDateTime.parse(listTask.getStartTime(), formatter))
+                        && LocalDateTime.parse(task.getEndTime(), formatter).isAfter(LocalDateTime.parse(listTask.getEndTime(), formatter))) {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+        return flag;
+
 //        List<Task> tasks = new ArrayList<>(getPrioritizedTaskList());
 //        if (!task.getStartTime().equals("0") && !task.getEndTime().equals("0")) {
 //            for (Task listTask : tasks) {
@@ -49,6 +64,5 @@ public class InMemoryTaskPrioritized implements TaskPrioritized {
 //        } else {
 //            System.out.println("listTask : getStartTime() == 0 || getEndTime() == 0");
 //        }
-        return false;
     }
 }

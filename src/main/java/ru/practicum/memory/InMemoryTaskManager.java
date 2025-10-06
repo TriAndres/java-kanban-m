@@ -394,10 +394,10 @@ public class InMemoryTaskManager implements TaskManage {
         return prioritized.getPrioritizedTaskList();
     }
 
-//    @Override
-//    public boolean isPrioritizedValidation(Task task) {
-//        return prioritized.validate(task);
-//    }
+    @Override
+    public boolean isPrioritizedValidation(Task task) {
+        return prioritized.validate(task);
+    }
 
     private static long getNextId() {
         return ++idCount;

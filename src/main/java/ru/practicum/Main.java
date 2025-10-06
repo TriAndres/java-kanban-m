@@ -18,7 +18,7 @@ import static ru.practicum.model.Status.NEW;
 
 
 public class Main {
-private final Scanner scanner = Managers.scanner();
+    private final Scanner scanner = Managers.scanner();
     private final TaskManage manage = detDefaultFile();
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
@@ -306,8 +306,23 @@ private final Scanner scanner = Managers.scanner();
 
     public void showPrioritized() {
         if (!manage.getPrioritizedTaskList().isEmpty()) {
+            System.out.println("prioritized-0");
             for (Task task : manage.getPrioritizedTaskList()) {
                 System.out.println(task);
+            }
+
+            System.out.println("prioritized-1");
+            for (Task task : manage.getPrioritizedTaskList()) {
+                if (manage.isPrioritizedValidation(task)) {
+                    System.out.println(task);
+                }
+            }
+
+            System.out.println("prioritized-2");
+            for (Task task : manage.getPrioritizedTaskList()) {
+                if (!manage.isPrioritizedValidation(task)) {
+                    System.out.println(task);
+                }
             }
         }
     }
