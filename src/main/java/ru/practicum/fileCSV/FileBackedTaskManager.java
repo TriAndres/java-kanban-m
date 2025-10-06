@@ -198,12 +198,12 @@ public class FileBackedTaskManager implements TaskManage {
         return  tasks;
     }
 
-//    @Override
-//    public boolean isPrioritizedValidation(Task task) {
-//        boolean is = inMemory.isPrioritizedValidation(task);
-//        save();
-//        return is;
-//    }
+    @Override
+    public boolean isPrioritizedValidation(Task task) {
+        boolean is = inMemory.isPrioritizedValidation(task);
+        save();
+        return is;
+    }
 
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
