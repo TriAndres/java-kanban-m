@@ -52,39 +52,101 @@ class InMemoryHistoryManagerTest {
         assertEquals(size, taskList.size(), "history size true");
     }
 
-//    @Test
-//    void notRepeat() {
-//        Task task1 = new Task(1L, TASK,"Test-Task", NEW,"Test-Task-description",0L);
-//        Task task2 = new Task(2L,  TASK,"Test-Task", NEW,"Test-Task-description",task1.getId());
-//        Task task3 = new Task(3L, TASK,"Test-Task", NEW,"Test-Task-description",task2.getId());
-//
-//        historyManager.addHistory(task1);
-//        historyManager.addHistory(task2);
-//        historyManager.addHistory(task3);
-//        historyManager.addHistory(task1);
-//        historyManager.addHistory(task2);
-//        historyManager.addHistory(task3);
-//        Integer size = 3;
-//
-//        final List<Task> taskList = historyManager.getHistoryMap();
-//        assertNotNull(taskList, "history not null");
-//        assertEquals(size, taskList.size(), "history size true");
-//    }
-//
-//    @Test
-//    void orderAdd() {
-//        Task task1 = new Task(1L, TASK,"Test-Task", NEW,"Test-Task-description",0L);
-//        Task task2 = new Task(2L, TASK,"Test-Task", NEW,"Test-Task-description", task1.getId());
-//        Task task3 = new Task(3L, TASK,"Test-Task", NEW,"Test-Task-description",task2.getId());
-//
-//        historyManager.addHistory(task1);
-//        historyManager.addHistory(task2);
-//        historyManager.addHistory(task3);
-//
-//        final List<Task> taskList = historyManager.getHistoryMap();
-//        assertEquals(task1, taskList.get(0),"orderAdd");
-//        assertEquals(task2, taskList.get(1),"orderAdd");
-//        assertEquals(task3, taskList.get(2),"orderAdd");
-//    }
+    @Test
+    void notRepeat() {
+        Task task1 = new Task(1L,
+                TASK,
+                "Test-Task",
+                NEW,
+                "Test-Task-description",
+                "0",
+                "0",
+                "0",
+                0L);
+        Task task2 = new Task(
+                2L,
+                TASK,
+                "Test-Task",
+                NEW,
+                "Test-Task-description",
+                "0",
+                "0",
+                "0",
+                0L);
+        Task task3 = new Task(
+                3L,
+                TASK,
+                "Test-Task",
+                NEW,
+                "Test-Task-description",
+                "0",
+                "0",
+                "0",
+                0L);
+
+        historyManager.addHistory(task1);
+        historyManager.addHistory(task2);
+        historyManager.addHistory(task3);
+        historyManager.addHistory(task1);
+        historyManager.addHistory(task2);
+        historyManager.addHistory(task3);
+        Integer size = 3;
+
+        final List<Task> taskList = historyManager.getHistoryMap();
+        assertEquals(size, taskList.size());
+        assertNotNull(taskList, "history not null");
+        assertEquals(size, taskList.size(), "history size true");
+    }
+
+    @Test
+    void orderAdd() {
+        Task task1 = new Task(1L,
+                TASK,
+                "Test-Task",
+                NEW,
+                "Test-Task-description",
+                "0",
+                "0",
+                "0",
+                0L);
+        Task task2 = new Task(
+                2L,
+                TASK,
+                "Test-Task",
+                NEW,
+                "Test-Task-description",
+                "0",
+                "0",
+                "0",
+                0L);
+        Task task3 = new Task(
+                3L,
+                TASK,
+                "Test-Task",
+                NEW,
+                "Test-Task-description",
+                "0",
+                "0",
+                "0",
+                0L);
+
+        historyManager.addHistory(task1);
+        historyManager.addHistory(task2);
+        historyManager.addHistory(task3);
+        historyManager.addHistory(task1);
+        historyManager.addHistory(task2);
+        historyManager.addHistory(task3);
+        Integer size = 3;
+
+        historyManager.addHistory(task1);
+        historyManager.addHistory(task2);
+        historyManager.addHistory(task3);
+
+        final List<Task> taskList = historyManager.getHistoryMap();
+        assertEquals(size, taskList.size());
+        assertEquals(task1, taskList.get(0),"orderAdd");
+        assertEquals(task2, taskList.get(1),"orderAdd");
+        assertEquals(task3, taskList.get(2),"orderAdd");
+    }
 
 }
