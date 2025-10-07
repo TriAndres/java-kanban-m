@@ -1,5 +1,6 @@
 ID_TYPE,id,type,name,status,description,duration,startTime,endTime,taskId
-ID_TASK,1,TASK,Задача,NEW,ewfewfde,0,06.10.2025 01:57,0,2
-ID_EPIC,2,EPIC,Эпик,NEW,ewfewfde,0,06.10.2025 01:57,0,1
-ID_SUBTASK,3,SUBTASK,Подзадача,NEW,dferf,0,06.10.2025 01:57,0,2
-ID_HISTORY,1,2,3,
+ID_TASK,1,TASK,Задача,DONE,thtrhrth,66,07.10.2025 09:57,07.10.2025 11:03,2
+ID_EPIC,2,EPIC,Эпик,DONE,thtrhrth,66,07.10.2025 09:57,07.10.2025 11:03,1
+ID_SUBTASK,3,SUBTASK,Подзадача,DONE,th6y56yh,18,07.10.2025 09:57,07.10.2025 10:15,2
+ID_SUBTASK,4,SUBTASK,Подзадача,DONE,ththhyt,33,07.10.2025 10:17,07.10.2025 10:50,2
+ID_HISTORY,1,2,3,4,

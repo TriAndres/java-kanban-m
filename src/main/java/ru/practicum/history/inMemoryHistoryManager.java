@@ -13,9 +13,9 @@ public class inMemoryHistoryManager implements HistoryManager{
     public void addHistory(Task task) {
         if (Objects.nonNull(task)) {
             long id = task.getId();
-            if (historyMap.containsKey(id)) {
-                 removeHistory(id);
-            }
+                if (historyMap.containsKey(id)) {
+                    removeHistory(id);
+                }
             historyMap.put(id, linkLast(task));
         }
     }
