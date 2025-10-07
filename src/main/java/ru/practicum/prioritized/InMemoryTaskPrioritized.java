@@ -1,5 +1,6 @@
 package ru.practicum.prioritized;
 
+import ru.practicum.model.Status;
 import ru.practicum.model.Task;
 
 import java.time.LocalDateTime;
@@ -32,37 +33,17 @@ public class InMemoryTaskPrioritized implements TaskPrioritized {
 
     public boolean validate(Task task) {
         boolean flag = true;
-        if (prioritized.contains(task)) {
-            for (Task listTask : prioritized) {
-                if (LocalDateTime.parse(task.getStartTime(), formatter).isBefore(LocalDateTime.parse(listTask.getStartTime(), formatter))
-                        && LocalDateTime.parse(task.getEndTime(), formatter).isBefore(LocalDateTime.parse(listTask.getEndTime(), formatter))
-                        || LocalDateTime.parse(task.getStartTime(), formatter).isAfter(LocalDateTime.parse(listTask.getStartTime(), formatter))
-                        && LocalDateTime.parse(task.getEndTime(), formatter).isAfter(LocalDateTime.parse(listTask.getEndTime(), formatter))) {
-                    flag = false;
-                    break;
-                }
+            if (prioritized.contains(task)) {
+                for (Task listTask : prioritized) {
+                        if (LocalDateTime.parse(task.getStartTime(), formatter).isBefore(LocalDateTime.parse(listTask.getStartTime(), formatter))
+                                && LocalDateTime.parse(task.getEndTime(), formatter).isBefore(LocalDateTime.parse(listTask.getEndTime(), formatter))
+                                || LocalDateTime.parse(task.getStartTime(), formatter).isAfter(LocalDateTime.parse(listTask.getStartTime(), formatter))
+                                && LocalDateTime.parse(task.getEndTime(), formatter).isAfter(LocalDateTime.parse(listTask.getEndTime(), formatter))) {
+                            flag = false;
+                            break;
+                        }
+                    }
             }
-        }
         return flag;
-
-//        List<Task> tasks = new ArrayList<>(getPrioritizedTaskList());
-//        if (!task.getStartTime().equals("0") && !task.getEndTime().equals("0")) {
-//            for (Task listTask : tasks) {
-//                if (!listTask.getStartTime().equals("0") && !listTask.getEndTime().equals("0")) {
-//                    if (LocalDateTime.parse(task.getStartTime(), formatter).isBefore(LocalDateTime.parse(listTask.getStartTime(), formatter))
-//                            && LocalDateTime.parse(task.getEndTime(), formatter).isBefore(LocalDateTime.parse(listTask.getEndTime(), formatter))
-//                            || LocalDateTime.parse(task.getStartTime(), formatter).isAfter(LocalDateTime.parse(listTask.getStartTime(), formatter))
-//                            && LocalDateTime.parse(task.getEndTime(), formatter).isAfter(LocalDateTime.parse(listTask.getEndTime(), formatter))) {
-//                        return true;
-//                    } else {
-//                        return false;
-//                    }
-//                } else {
-//                    System.out.println("listTask : getStartTime() == 0 || getEndTime() == 0");
-//                }
-//            }
-//        } else {
-//            System.out.println("listTask : getStartTime() == 0 || getEndTime() == 0");
-//        }
     }
 }

@@ -1,21 +1,8 @@
-package ru.practicum.manage;
+package ru.practicum.memory;
 
-import org.junit.jupiter.api.Test;
-import ru.practicum.memory.TaskManage;
-import ru.practicum.controller.Managers;
-import ru.practicum.model.Epic;
-import ru.practicum.model.Subtask;
-import ru.practicum.model.Task;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static ru.practicum.model.Status.*;
-import static ru.practicum.model.TaskType.*;
 
-class InMemoryTaskManagerTest {
+class InMemoryTaskManagerTest12 {
 //    private  final TaskManage taskManage = Managers.getDefault();
 //
 //    @Test
