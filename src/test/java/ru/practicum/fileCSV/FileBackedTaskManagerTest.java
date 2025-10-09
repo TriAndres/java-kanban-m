@@ -12,7 +12,7 @@ class FileBackedTaskManagerTest  extends TaskManagerTest<FileBackedTaskManager> 
     @BeforeEach
     public void createTest() throws IOException {
         //file = File.createTempFile("test", "txt");
-        file = new File("src\\test\\java\\ru\\practicum\\history\\test.txt");
+        file = new File("src\\test\\java\\ru\\practicum\\fileCSV\\test.txt");
         manager = new FileBackedTaskManager(file);
     }
 }

@@ -1,0 +1,6 @@
+ID_TYPE,id,type,name,status,description,duration,startTime,endTime,taskId
+ID_TASK,13,TASK,Задача,IN_PROGRESS,Test-Task-description,0,0,0,14
+ID_EPIC,14,EPIC,Эпик,IN_PROGRESS,Test-Epic-description,0,0,0,13
+ID_SUBTASK,16,SUBTASK,Подзадача,NEW,Test-Epic-description,0,0,0,14
+ID_SUBTASK,15,SUBTASK,Подзадача,DONE,Test-Epic-description,0,0,0,14
+ID_HISTORY,13,14,16,15,

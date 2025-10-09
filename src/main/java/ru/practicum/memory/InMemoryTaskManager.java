@@ -123,6 +123,7 @@ public class InMemoryTaskManager implements TaskManage {
                 oldTask.setTaskId(task.getTaskId());
                 taskMap.put(oldTask.getId(), oldTask);
                 addHistory(oldTask.getId());
+                statusEpic(epicMap.get(oldTask.getTaskId()));
             }
         }
     }
@@ -302,7 +303,9 @@ public class InMemoryTaskManager implements TaskManage {
                 Task task = getTaskById(epic.getTaskId());
                 if (epic.getSubtaskIdList().isEmpty()) {
                     epic.setStatus(Status.NEW);
-                    task.setStatus(Status.NEW);
+                    if (task != null) {
+                        task.setStatus(Status.NEW);
+                    }
                 } else {
                     List<Long> subtaskNew = new ArrayList<>(epic.getSubtaskIdList());
                     int countDone = 0;
@@ -341,17 +344,19 @@ public class InMemoryTaskManager implements TaskManage {
                     countDone++;
                 }
                 if (countDone == epic.getSubtaskIdList().size()) {
-                    LocalDateTime localDateTime = LocalDateTime.now();
-                    String time = localDateTime.format(formatter);
-                    task.setEndTime(time);
-                    Long minute = Duration.between(
-                                    LocalDateTime.parse(task.getStartTime(), formatter),
-                                    LocalDateTime.parse(task.getEndTime(), formatter)
-                            )
-                            .toMinutes();
-                    task.setDuration(String.valueOf(minute));
-                    epic.setDuration(task.getDuration());
-                    epic.setEndTime(task.getEndTime());
+                    if (!task.getStartTime().equals("0")) {
+                        LocalDateTime localDateTime = LocalDateTime.now();
+                        String time = localDateTime.format(formatter);
+                        task.setEndTime(time);
+                        Long minute = Duration.between(
+                                        LocalDateTime.parse(task.getStartTime(), formatter),
+                                        LocalDateTime.parse(task.getEndTime(), formatter)
+                                )
+                                .toMinutes();
+                        task.setDuration(String.valueOf(minute));
+                        epic.setDuration(task.getDuration());
+                        epic.setEndTime(task.getEndTime());
+                    }
                 } else {
                     task.setEndTime("0");
                     task.setDuration("0");
